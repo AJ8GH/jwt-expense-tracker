@@ -1,0 +1,8 @@
+services:
+  expense-tracker:
+    container_name: expense-tracker
+    ports:
+      - '8080:8080'
+    build:
+      dockerfile: Dockerfile
+      context: .
