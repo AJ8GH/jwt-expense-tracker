@@ -14,9 +14,8 @@ Persists expenses using PostgreSQL database.
 ### Clone the repo
 
 ```sh
-git clone git@github.com:AJ8GH/jwt-expense-tracker.git
-
-cd jwt-expense-tracker
+git clone git@github.com:AJ8GH/jwt-expense-tracker.git \
+&& cd jwt-expense-tracker
 ```
 
 ### Local
@@ -39,7 +38,7 @@ docker compose up
 
 ## Dependencies
 
-> Library and plugin versions defined in `gradle.properties`
+> Library and plugin versions defined in `gradle/libs.versions.toml`
 
 - Kotlin `2.1.21`
 - JDK `21`

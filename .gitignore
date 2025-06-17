@@ -9,3 +9,5 @@ target
 .vscode
 .kotlin
 .gradle
+.sdkmanrc
+.python_version
