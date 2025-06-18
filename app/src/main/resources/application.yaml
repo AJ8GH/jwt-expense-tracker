@@ -1,18 +1,17 @@
 db:
   name: jwt_expense_tracker
-  port: 5432
-  host: ${DATABASE_HOST:localhost}
-  dialect: org.hibernate.dialect.PostgreSQLDialect
-  driver: org.postgresql.Driver
-  user: ${db.name}
+  host: localhost
 
 spring:
+  config:
+    import: optional:secrets.yaml
   output:
     ansi:
       enabled: ALWAYS
   jpa:
     open-in-view: false
-    database-platform: ${db.dialect}
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
-    url: jdbc:postgresql://${db.host}:${db.port}/${db.name}
-#    driver-class-name: ord
+    url: jdbc:postgresql://${DB_HOST:${db.host}}:5432/${POSTGRES_DB:${db.name}}
+    username: ${POSTGRES_USER:${db.name}}
+    password: ${POSTGRES_PASSWORD:${db.password}}

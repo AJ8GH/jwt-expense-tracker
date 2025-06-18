@@ -1,5 +1,7 @@
 !gradle-wrapper.jar
 secrets.yaml
+data
+.env
 out
 build
 target
