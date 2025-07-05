@@ -39,7 +39,7 @@ class AuthenticationService(
   fun refreshAccessToken(refreshToken: String): String {
     val username = jwtService.extractUsername(refreshToken)
     val userDetails = userDetailsService.loadUserByUsername(username)
-    val refreshTokenUserDetails = refreshTokenRepository.findUserDetailsByToken(refreshToken)
+    val refreshTokenUserDetails = refreshTokenRepository.findUserByToken(refreshToken)
     if (userDetails.username == refreshTokenUserDetails?.username) {
       return createToken(userDetails.username, accessTokenTtlMillis)
     } else {

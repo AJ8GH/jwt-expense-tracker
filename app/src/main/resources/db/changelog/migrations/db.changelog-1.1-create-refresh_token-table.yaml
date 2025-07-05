@@ -23,12 +23,11 @@ databaseChangeLog:
                     unique: true
                     updatable: false
               - column:
-                  name: refresh_token
+                  name: token
                   type: TEXT
                   constraints:
                     nullable: false
                     unique: true
-                    updatable: false
               - column:
                   name: person_id
                   type: UUID
@@ -36,8 +35,8 @@ databaseChangeLog:
                     nullable: false
                     unique: true
                     updatable: false
-                    foreignKeyName: fk_refresh_token_person_id
-                    references: person(id)
+                    # foreignKeyName: fk_refresh_token_person_id
+                    # references: person(id)
               - column:
                   name: created_at
                   type: TIMESTAMP WITH TIME ZONE

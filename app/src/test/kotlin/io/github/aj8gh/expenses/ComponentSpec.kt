@@ -11,6 +11,7 @@ import io.github.aj8gh.expenses.config.TestClientConfig
 import io.github.aj8gh.expenses.config.TestDatabaseConfig
 import io.github.aj8gh.expenses.persistence.model.PersonEntity
 import io.github.aj8gh.expenses.persistence.repository.JpaPersonRepository
+import io.github.aj8gh.expenses.persistence.repository.JpaRefreshTokenRepository
 import io.github.aj8gh.expenses.persistence.repository.PersonRepository
 import io.github.aj8gh.expenses.service.security.JwtService
 import io.jsonwebtoken.ExpiredJwtException
@@ -58,6 +59,7 @@ class ComponentSpec(
   private val mockMvc: MockMvc,
   private val personRepository: PersonRepository,
   private val jpaPersonRepository: JpaPersonRepository,
+  private val jpaRefreshTokenRepository: JpaRefreshTokenRepository,
 ) : FunSpec({
 
   val user = PersonEntity(username = USERNAME, password = PASSWORD)
@@ -105,6 +107,7 @@ class ComponentSpec(
 
   beforeEach {
     jpaPersonRepository.deleteAll()
+    jpaRefreshTokenRepository.deleteAll()
   }
 
   test("unauthenticated request to secure endpoint should return 403") {
