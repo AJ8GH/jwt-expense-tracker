@@ -2,7 +2,18 @@ db:
   name: jwt_expense_tracker
   host: localhost
 
+auth:
+  token:
+    ttl-millis:
+      jwt: 3600
+      refresh: 3600000
+  password:
+    strength: 10
+
 spring:
+  security:
+    user:
+      name: user
   config:
     import: optional:secrets.yaml
   output:
@@ -24,4 +35,4 @@ management:
 
 server:
   servlet:
-    context-path: /api
+    context-path: "/api"
