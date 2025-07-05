@@ -9,10 +9,10 @@ import io.github.aj8gh.expenses.api.model.auth.RefreshTokenRequest
 import io.github.aj8gh.expenses.api.model.auth.RefreshTokenResponse
 import io.github.aj8gh.expenses.config.TestClientConfig
 import io.github.aj8gh.expenses.config.TestDatabaseConfig
-import io.github.aj8gh.expenses.persistence.model.PersonEntity
-import io.github.aj8gh.expenses.persistence.repository.JpaPersonRepository
+import io.github.aj8gh.expenses.persistence.model.PartyEntity
+import io.github.aj8gh.expenses.persistence.repository.JpaPartyRepository
 import io.github.aj8gh.expenses.persistence.repository.JpaRefreshTokenRepository
-import io.github.aj8gh.expenses.persistence.repository.PersonRepository
+import io.github.aj8gh.expenses.persistence.repository.PartyRepository
 import io.github.aj8gh.expenses.service.security.JwtService
 import io.jsonwebtoken.ExpiredJwtException
 import io.kotest.core.spec.style.FunSpec
@@ -57,15 +57,15 @@ class ComponentSpec(
   @MockitoSpyBean private val jwtService: JwtService,
   private val mapper: ObjectMapper,
   private val mockMvc: MockMvc,
-  private val personRepository: PersonRepository,
-  private val jpaPersonRepository: JpaPersonRepository,
+  private val partyRepository: PartyRepository,
+  private val jpaPartyRepository: JpaPartyRepository,
   private val jpaRefreshTokenRepository: JpaRefreshTokenRepository,
 ) : FunSpec({
 
-  val user = PersonEntity(username = USERNAME, password = PASSWORD)
+  val user = PartyEntity(username = USERNAME, password = PASSWORD)
   val authRequest = AuthenticationRequest(username = USERNAME, password = PASSWORD)
 
-  fun saveUser() = personRepository.save(user)
+  fun saveUser() = partyRepository.save(user)
 
   fun performPost(path: String, content: Any) = mockMvc.perform(
     post(path)
@@ -106,7 +106,7 @@ class ComponentSpec(
   }
 
   beforeEach {
-    jpaPersonRepository.deleteAll()
+    jpaPartyRepository.deleteAll()
     jpaRefreshTokenRepository.deleteAll()
   }
 

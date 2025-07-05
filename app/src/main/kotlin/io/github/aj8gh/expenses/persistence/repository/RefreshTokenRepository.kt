@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class RefreshTokenRepository(
   private val tokenRepository: JpaRefreshTokenRepository,
-  private val personRepository: PersonRepository,
+  private val partyRepository: PartyRepository,
 ) {
   fun findUserByToken(token: String) = tokenRepository.findUserDetailsByToken(token)
 
@@ -15,7 +15,7 @@ class RefreshTokenRepository(
     tokenRepository.save(
       RefreshTokenEntity(
         token = token,
-        personId = personRepository.findByUsername(userDetails.username)!!.id!!,
+        partyId = partyRepository.findByUsername(userDetails.username)!!.id!!,
       )
     )
   }

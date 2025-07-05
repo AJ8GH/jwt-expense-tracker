@@ -5,7 +5,7 @@ databaseChangeLog:
       preConditions:
         - onFail: MARK_RAN
         - tableExists:
-            tableName: person
+            tableName: party
         - not:
             - tableExists:
                 tableName: refresh_token
@@ -29,14 +29,14 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: person_id
+                  name: party_id
                   type: UUID
                   constraints:
                     nullable: false
                     unique: true
                     updatable: false
-                    # foreignKeyName: fk_refresh_token_person_id
-                    # references: person(id)
+                    # foreignKeyName: fk_refresh_token_party_id
+                    # references: party(id)
               - column:
                   name: created_at
                   type: TIMESTAMP WITH TIME ZONE

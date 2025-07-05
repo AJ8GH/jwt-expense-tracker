@@ -1,22 +1,22 @@
 databaseChangeLog:
   - changeSet:
-      id: create-person-table
+      id: create-party-table
       author: aj8gh
       preConditions:
         - onFail: MARK_RAN
           not:
             - tableExists:
-                tableName: person
+                tableName: party
       changes:
         - createTable:
-            tableName: person
+            tableName: party
             columns:
               - column:
                   name: id
                   type: UUID
                   constraints:
                     primaryKey: true
-                    primaryKeyName: pk_person
+                    primaryKeyName: pk_party
                     nullable: false
                     unique: true
                     updatable: false

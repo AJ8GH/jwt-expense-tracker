@@ -1,21 +1,21 @@
 package io.github.aj8gh.expenses.persistence.repository
 
-import io.github.aj8gh.expenses.persistence.model.PersonEntity
+import io.github.aj8gh.expenses.persistence.model.PartyEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Repository
 
 @Repository
-class PersonRepository(
-  private val repository: JpaPersonRepository,
+class PartyRepository(
+  private val repository: JpaPartyRepository,
   private val encoder: PasswordEncoder,
 ) {
 
-  fun findByUsername(username: String): PersonEntity? =
+  fun findByUsername(username: String): PartyEntity? =
     repository.findByUsername(username)
 
-  fun save(entity: PersonEntity) =
+  fun save(entity: PartyEntity): PartyEntity =
     repository.save(
-      PersonEntity(
+      PartyEntity(
         username = entity.username,
         password = encoder.encode(entity.password),
         role = entity.role,

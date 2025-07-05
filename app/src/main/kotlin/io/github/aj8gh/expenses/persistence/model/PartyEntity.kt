@@ -10,8 +10,8 @@ import org.hibernate.annotations.UuidGenerator
 import java.time.Instant
 import java.util.*
 
-@Entity(name = "person")
-data class PersonEntity(
+@Entity(name = "party")
+data class PartyEntity(
   @Id @UuidGenerator val id: UUID? = null,
   val username: String,
   val password: String,

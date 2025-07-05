@@ -5,8 +5,8 @@ db:
 auth:
   token:
     ttl-millis:
-      jwt: 3600
-      refresh: 3600000
+      jwt: 300000 # 5 minutes
+      refresh: 2592000000 # 30 days
   password:
     strength: 10
 
@@ -36,3 +36,7 @@ management:
 server:
   servlet:
     context-path: "/api"
+
+logging:
+  level:
+    org.springframework: DEBUG

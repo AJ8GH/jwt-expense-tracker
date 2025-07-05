@@ -1,6 +1,7 @@
 package io.github.aj8gh.expenses.config
 
 import io.github.aj8gh.expenses.api.controller.AUTH_PATH
+import io.github.aj8gh.expenses.api.controller.PARTIES_PATH
 import io.github.aj8gh.expenses.service.security.JwtAuthorizationFilter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -37,7 +38,13 @@ class SecurityConfig(
     .csrf { it.disable() }
     .authorizeHttpRequests {
       it
-        .requestMatchers(AUTH_PATH, "$basePath$AUTH_PATH", "$AUTH_PATH$WILDCARD", ERROR)
+        .requestMatchers(
+          AUTH_PATH,
+          PARTIES_PATH,
+          "$basePath$AUTH_PATH",
+          "$AUTH_PATH$WILDCARD",
+          ERROR
+        )
         .permitAll()
         .anyRequest()
         .fullyAuthenticated()

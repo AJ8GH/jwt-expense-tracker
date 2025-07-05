@@ -12,7 +12,7 @@ import java.util.*
 data class RefreshTokenEntity(
   @Id @UuidGenerator val id: UUID? = null,
   val token: String,
-  val personId: UUID,
+  val partyId: UUID,
   @CreationTimestamp val createdAt: Instant? = null,
   @UpdateTimestamp val updatedAt: Instant? = null,
 )
