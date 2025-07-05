@@ -10,15 +10,15 @@ import org.hibernate.annotations.UuidGenerator
 import java.time.Instant
 import java.util.*
 
-@Entity
+@Entity(name = "person")
 data class PersonEntity(
-  @Id @UuidGenerator val id: UUID,
+  @Id @UuidGenerator val id: UUID? = null,
   val username: String,
   val password: String,
   val role: Role = USER,
   val status: Status = ACTIVE,
-  @CreationTimestamp val createdAt: Instant,
-  @UpdateTimestamp val updatedAt: Instant,
+  @CreationTimestamp val createdAt: Instant? = null,
+  @UpdateTimestamp val updatedAt: Instant? = null,
 )
 
 enum class Status {

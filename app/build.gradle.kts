@@ -1,4 +1,5 @@
 plugins {
+  alias(libs.plugins.kotlin.jpa)
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.kotlin.spring)
   alias(libs.plugins.kover)
