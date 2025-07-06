@@ -3,12 +3,21 @@ package io.github.aj8gh.expenses.service.security
 import io.github.aj8gh.expenses.api.model.auth.AuthenticationRequest
 import io.github.aj8gh.expenses.api.model.auth.AuthenticationResponse
 import io.github.aj8gh.expenses.persistence.repository.RefreshTokenRepository
+import io.github.aj8gh.expenses.service.security.TokenType.ACCESS
+import io.github.aj8gh.expenses.service.security.TokenType.REFRESH
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationServiceException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
+
+const val TOKEN_TYPE_CLAIM = "tokenType"
+
+enum class TokenType {
+  ACCESS,
+  REFRESH,
+}
 
 @Service
 class AuthenticationService(
@@ -29,24 +38,31 @@ class AuthenticationService(
     )
 
     val user = userDetailsService.loadUserByUsername(request.username)
-    val accessToken = createToken(user.username, accessTokenTtlMillis)
-    val refreshToken = createToken(user.username, refreshTokenTtlMillis)
+    val accessToken = createToken(user.username, accessTokenTtlMillis, ACCESS)
+    val refreshToken = createToken(user.username, refreshTokenTtlMillis, REFRESH)
     refreshTokenRepository.save(refreshToken, user)
 
     return AuthenticationResponse(accessToken = accessToken, refreshToken = refreshToken)
   }
 
   fun refreshAccessToken(refreshToken: String): String {
-    val username = jwtService.extractUsername(refreshToken)
+    val username = jwtService.extractClaims(refreshToken).subject
     val userDetails = userDetailsService.loadUserByUsername(username)
     val refreshTokenUserDetails = refreshTokenRepository.findUserByToken(refreshToken)
     if (userDetails.username == refreshTokenUserDetails?.username) {
-      return createToken(userDetails.username, accessTokenTtlMillis)
+      return createToken(userDetails.username, accessTokenTtlMillis, ACCESS)
     } else {
       throw AuthenticationServiceException("Invalid refresh token")
     }
   }
 
-  private fun createToken(username: String, ttlMillis: Long) =
-    jwtService.generateToken(username, ttlMillis)
+  private fun createToken(
+    username: String,
+    ttlMillis: Long,
+    tokenType: TokenType,
+  ) = jwtService.generateToken(
+    username,
+    ttlMillis,
+    mapOf(Pair(TOKEN_TYPE_CLAIM, tokenType))
+  )
 }

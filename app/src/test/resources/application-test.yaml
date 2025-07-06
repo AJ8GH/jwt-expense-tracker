@@ -3,6 +3,6 @@ zonky:
     database:
       type: postgres
 
-logging:
-  level:
-    org.springframework: DEBUG
+# logging:
+#   level:
+#     org.springframework: DEBUG

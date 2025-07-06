@@ -1,5 +1,6 @@
 package io.github.aj8gh.expenses.service.security
 
+import io.github.aj8gh.expenses.service.security.TokenType.ACCESS
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -27,15 +28,20 @@ class JwtAuthorizationFilter(
     if (null != authorizationHeader && authorizationHeader.startsWith("Bearer ")) {
       try {
         val token: String = authorizationHeader.substringAfter("Bearer ")
-        val username: String = jwtService.extractUsername(token)
+        val claims = jwtService.extractClaims(token)
+        val username: String = claims.subject
+        val tokenType = claims[TOKEN_TYPE_CLAIM]
 
         if (SecurityContextHolder.getContext().authentication == null) {
           val userDetails: UserDetails = userDetailsService.loadUserByUsername(username)
 
-          if (username == userDetails.username) {
+          if (username == userDetails.username && tokenType == ACCESS.name) {
             val authToken = UsernamePasswordAuthenticationToken(
-              userDetails, null, userDetails.authorities
+              userDetails,
+              null,
+              userDetails.authorities
             )
+
             authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
             SecurityContextHolder.getContext().authentication = authToken
           }

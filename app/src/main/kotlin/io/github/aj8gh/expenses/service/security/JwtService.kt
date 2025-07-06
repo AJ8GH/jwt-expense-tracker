@@ -1,5 +1,6 @@
 package io.github.aj8gh.expenses.service.security
 
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -21,7 +22,7 @@ class JwtService(
   fun generateToken(
     subject: String,
     ttlMillis: Long,
-    additionalClaims: Map<String, Any> = emptyMap(),
+    additionalClaims: Map<String, Any>,
   ): String = clock.instant().toEpochMilli().let {
     Jwts.builder()
       .claims(additionalClaims)
@@ -32,10 +33,9 @@ class JwtService(
       .compact()
   }
 
-  fun extractUsername(token: String): String = Jwts.parser()
+  fun extractClaims(token: String): Claims = Jwts.parser()
     .verifyWith(signingKey())
     .build()
     .parseSignedClaims(token)
     .payload
-    .subject
 }

@@ -123,6 +123,12 @@ class ComponentSpec(
       .andExpect(jsonPath("$.refreshToken").isNotEmpty)
   }
 
+  test("using refresh token as access token should return 403") {
+    val authResponse = authenticate()
+    performGet(INFO_PATH, authResponse.refreshToken)
+      .andExpect(status().isForbidden)
+  }
+
   test("auth request for unknown user should return 403") {
     performPost(AUTH_PATH, authRequest)
       .andExpect(status().isForbidden)
@@ -139,7 +145,7 @@ class ComponentSpec(
     performGet(INFO_PATH, authResponse.accessToken)
       .andExpect(status().isOk)
 
-    `when`(jwtService.extractUsername(authResponse.accessToken))
+    `when`(jwtService.extractClaims(authResponse.accessToken))
       .thenThrow(ExpiredJwtException::class.java)
 
     performGet(INFO_PATH, authResponse.accessToken)
