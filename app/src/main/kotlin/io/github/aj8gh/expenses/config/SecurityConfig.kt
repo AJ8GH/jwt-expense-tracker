@@ -37,7 +37,7 @@ class SecurityConfig(
   ): DefaultSecurityFilterChain = http
     .csrf { it.disable() }
     .authorizeHttpRequests {
-      it.requestMatchers(PARTIES_PATH, "$AUTH_PATH$WILDCARD", ERROR)
+      it.requestMatchers(PARTIES_PATH, AUTH_PATH, "$AUTH_PATH$WILDCARD", ERROR)
         .permitAll()
         .anyRequest()
         .fullyAuthenticated()

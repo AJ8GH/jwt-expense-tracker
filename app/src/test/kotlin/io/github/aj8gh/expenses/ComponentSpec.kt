@@ -13,6 +13,7 @@ import io.github.aj8gh.expenses.persistence.model.PartyEntity
 import io.github.aj8gh.expenses.persistence.repository.JpaPartyRepository
 import io.github.aj8gh.expenses.persistence.repository.JpaRefreshTokenRepository
 import io.github.aj8gh.expenses.persistence.repository.PartyRepository
+import io.github.aj8gh.expenses.service.security.BEARER
 import io.github.aj8gh.expenses.service.security.JwtService
 import io.jsonwebtoken.ExpiredJwtException
 import io.kotest.core.spec.style.FunSpec
@@ -21,7 +22,6 @@ import io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseProvider.ZONKY
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES
 import org.mockito.Mockito.reset
 import org.mockito.Mockito.`when`
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -39,8 +39,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 private const val USERNAME = "username"
 private const val PASSWORD = "password"
-private const val BEARER = "Bearer"
 private const val INFO_PATH = "/actuator/info"
+private const val ACCESS_TOKEN_PATH = "$.accessToken"
+private const val REFRESH_TOKEN_PATH = "$.refreshToken"
 
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -53,7 +54,6 @@ private const val INFO_PATH = "/actuator/info"
   ]
 )
 class ComponentSpec(
-  @Value("\${server.servlet.context-path}") private val basePath: String,
   @MockitoSpyBean private val jwtService: JwtService,
   private val mapper: ObjectMapper,
   private val mockMvc: MockMvc,
@@ -76,8 +76,8 @@ class ComponentSpec(
   fun authenticate() = saveUser().let {
     performPost(AUTH_PATH, authRequest)
       .andExpect(status().isCreated)
-      .andExpect(jsonPath("$.accessToken").isNotEmpty)
-      .andExpect(jsonPath("$.refreshToken").isNotEmpty)
+      .andExpect(jsonPath(ACCESS_TOKEN_PATH).isNotEmpty)
+      .andExpect(jsonPath(REFRESH_TOKEN_PATH).isNotEmpty)
       .andReturn()
       .response
       .contentAsString
@@ -87,7 +87,7 @@ class ComponentSpec(
   fun refreshJwt(refreshToken: String) =
     performPost("$AUTH_PATH$REFRESH_PATH", RefreshTokenRequest(refreshToken))
       .andExpect(status().isCreated)
-      .andExpect(jsonPath("$.accessToken").isNotEmpty)
+      .andExpect(jsonPath(ACCESS_TOKEN_PATH).isNotEmpty)
       .andReturn()
       .response
       .contentAsString
@@ -96,7 +96,7 @@ class ComponentSpec(
   fun performGet(path: String, token: String? = null): ResultActions {
     val request = get(path).let { requestBuilder ->
       token?.let {
-        requestBuilder.header(AUTHORIZATION, "$BEARER $token")
+        requestBuilder.header(AUTHORIZATION, "$BEARER$token")
       } ?: requestBuilder
     }
 
@@ -119,8 +119,8 @@ class ComponentSpec(
     saveUser()
     performPost(AUTH_PATH, authRequest)
       .andExpect(status().isCreated)
-      .andExpect(jsonPath("$.accessToken").isNotEmpty)
-      .andExpect(jsonPath("$.refreshToken").isNotEmpty)
+      .andExpect(jsonPath(ACCESS_TOKEN_PATH).isNotEmpty)
+      .andExpect(jsonPath(REFRESH_TOKEN_PATH).isNotEmpty)
   }
 
   test("using refresh token as access token should return 403") {

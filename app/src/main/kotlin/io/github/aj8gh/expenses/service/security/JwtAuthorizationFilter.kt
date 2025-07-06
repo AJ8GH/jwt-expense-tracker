@@ -4,13 +4,17 @@ import io.github.aj8gh.expenses.service.security.TokenType.ACCESS
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
+
+const val BEARER = "Bearer "
+private const val ERROR_MESSAGE = """{ "error": "Filter Authorization error: '%s'" }"""
+private const val UNKNOWN_ERROR = "unknown error"
 
 @Component
 class JwtAuthorizationFilter(
@@ -23,37 +27,32 @@ class JwtAuthorizationFilter(
     response: HttpServletResponse,
     filterChain: FilterChain,
   ) {
-    val authorizationHeader: String? = request.getHeader("Authorization")
+    authorizeRequest(request, response)
+    filterChain.doFilter(request, response)
+  }
 
-    if (null != authorizationHeader && authorizationHeader.startsWith("Bearer ")) {
+  private fun authorizeRequest(
+    request: HttpServletRequest,
+    response: HttpServletResponse,
+  ) = request.getHeader(AUTHORIZATION)
+    ?.takeIf { it.startsWith(BEARER) }
+    ?.let {
       try {
-        val token: String = authorizationHeader.substringAfter("Bearer ")
-        val claims = jwtService.extractClaims(token)
-        val username: String = claims.subject
-        val tokenType = claims[TOKEN_TYPE_CLAIM]
-
-        if (SecurityContextHolder.getContext().authentication == null) {
-          val userDetails: UserDetails = userDetailsService.loadUserByUsername(username)
-
-          if (username == userDetails.username && tokenType == ACCESS.name) {
-            val authToken = UsernamePasswordAuthenticationToken(
-              userDetails,
-              null,
-              userDetails.authorities
-            )
-
-            authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-            SecurityContextHolder.getContext().authentication = authToken
-          }
-        }
+        validateToken(it, request)
       } catch (ex: Exception) {
-        response.writer.write(
-          """{"error": "Filter Authorization error: 
-                    |${ex.message ?: "unknown error"}"}""".trimMargin()
-        )
+        response.writer.write(ERROR_MESSAGE.format(ex.message ?: UNKNOWN_ERROR))
       }
     }
 
-    filterChain.doFilter(request, response)
-  }
+  private fun validateToken(authHeader: String, request: HttpServletRequest) =
+    SecurityContextHolder.getContext().authentication ?: run {
+      val claims = jwtService.extractClaims(authHeader.substringAfter(BEARER))
+      userDetailsService.loadUserByUsername(claims.subject)
+        .takeIf { claims.subject == it.username && claims[TOKEN_TYPE_CLAIM] == ACCESS.name }
+        ?.let { user ->
+          UsernamePasswordAuthenticationToken(user, null, user.authorities)
+            .also { it.details = WebAuthenticationDetailsSource().buildDetails(request) }
+            .also { SecurityContextHolder.getContext().authentication = it }
+        }
+    }
 }
