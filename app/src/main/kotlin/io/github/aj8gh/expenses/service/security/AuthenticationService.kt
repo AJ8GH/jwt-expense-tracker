@@ -41,18 +41,24 @@ class AuthenticationService(
     val accessToken = createToken(user.username, accessTokenTtlMillis, ACCESS)
     val refreshToken = createToken(user.username, refreshTokenTtlMillis, REFRESH)
     refreshTokenRepository.save(refreshToken, user)
-
     return AuthenticationResponse(accessToken = accessToken, refreshToken = refreshToken)
   }
 
   fun refreshAccessToken(refreshToken: String): String {
-    val username = jwtService.extractClaims(refreshToken).subject
-    val userDetails = userDetailsService.loadUserByUsername(username)
-    val refreshTokenUserDetails = refreshTokenRepository.findUserByToken(refreshToken)
-    if (userDetails.username == refreshTokenUserDetails?.username) {
-      return createToken(userDetails.username, accessTokenTtlMillis, ACCESS)
-    } else {
-      throw AuthenticationServiceException("Invalid refresh token")
+    try {
+      val username = jwtService.extractClaims(refreshToken).subject
+      val userDetails = userDetailsService.loadUserByUsername(username)
+      val refreshTokenUserDetails = refreshTokenRepository.findUserByToken(refreshToken)
+      if (userDetails.username == refreshTokenUserDetails?.username) {
+        return createToken(userDetails.username, accessTokenTtlMillis, ACCESS)
+      } else {
+        throw AuthenticationServiceException("Invalid refresh token")
+      }
+    } catch (e: Exception) {
+      throw AuthenticationServiceException(
+        "Exception when refreshing token: ${e.message}",
+        e.cause
+      )
     }
   }
 

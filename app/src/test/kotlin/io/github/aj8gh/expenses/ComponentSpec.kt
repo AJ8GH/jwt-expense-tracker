@@ -47,8 +47,14 @@ private const val INFO_PATH = "/actuator/info"
 private const val ACCESS_TOKEN_PATH = "$.accessToken"
 private const val REFRESH_TOKEN_PATH = "$.refreshToken"
 private const val INVALID_TOKEN_PREFIX = "Beerer "
-private const val INVALID_TOKEN =
-  "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwic3ViIjoibWU4IiwiaWF0IjoxNzUxNzU2MTcwLCJleHAiOjE3NTQzNDgxNzB9.XnTSk-FkviZwR98WuGEcjWZtDszJe5WTeicNXM94-E4"
+private const val INVALID_ACCESS_TOKEN =
+  "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJzdWIiOiJtZTgiLCJpYXQiOjE3NTE3NTYxNzAsImV4cCI6MTc1MTc1NjQ3MH0.174KlSzPRTEvkAY0md5S4psUn6hHXFJ53KgdasqrPHU"
+private const val INVALID_REFRESH_TOKEN =
+  "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwic3ViIjoic29tZU90aGVyVXNlck5hbWUiLCJpYXQiOjE3NTE3NTYxNzAsImV4cCI6OTk5OTk5OTk5OX0.nHZaaooKZgXL8WTBP7dwEFIHRsWMeeaEaGZOQYLL_F4"
+private const val EXPIRED_ACCESS_TOKEN =
+  "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlblR5cGUiOiJBQ0NFU1MiLCJzdWIiOiJ1c2VybmFtZSIsImlhdCI6MTc1MTc1NjE3MCwiZXhwIjoxNzUxNzU2MTcxfQ.O8pEbFjXt1XAoegBQhrKZH7GitGVnHY7DjZObzEMcDk"
+private const val EXPIRED_REFRESH_TOKEN =
+  "eyJhbGciOiJIUzI1NiJ9.eyJ0b2tlblR5cGUiOiJSRUZSRVNIIiwic3ViIjoidXNlcm5hbWUiLCJpYXQiOjE3NTE3NTYxNzAsImV4cCI6MTc1MTc1NjE3MX0.JPDKVsJwRbURN2jk8RXk4XIby4ETT0j4lgNGuDn1Idc"
 
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -163,17 +169,28 @@ class ComponentSpec(
       .andExpect(status().isForbidden)
   }
 
+  test("using access token as refresh token should return 403") {
+    val authResponse = authenticate()
+    performPost("$AUTH_PATH$REFRESH_PATH", RefreshTokenRequest(authResponse.accessToken))
+      .andExpect(status().isForbidden)
+  }
+
   test("auth request for unknown user should return 403") {
     performPost(AUTH_PATH, authRequest())
       .andExpect(status().isForbidden)
   }
 
-  test("request with invalid token should return 403") {
-    performGet(INFO_PATH, INVALID_TOKEN)
+  test("request with access token for non-existent user should return 403") {
+    performGet(INFO_PATH, INVALID_ACCESS_TOKEN)
       .andExpect(status().isForbidden)
   }
 
-  test("request with tampered token should return 403") {
+  test("request with refresh token for non-existent user should return 403") {
+    performPost("$AUTH_PATH$REFRESH_PATH", RefreshTokenRequest(INVALID_REFRESH_TOKEN))
+      .andExpect(status().isForbidden)
+  }
+
+  test("request with tampered access token should return 403") {
     val authResponse = authenticate()
     `when`(userDetailsService.loadUserByUsername(USERNAME))
       .thenReturn(User(OTHER_USERNAME, OTHER_PASSWORD, listOf()))
@@ -181,9 +198,29 @@ class ComponentSpec(
       .andExpect(status().isForbidden)
   }
 
+  test("request with tampered refresh token should return 403") {
+    val authResponse = authenticate()
+    `when`(userDetailsService.loadUserByUsername(USERNAME))
+      .thenReturn(User(OTHER_USERNAME, OTHER_PASSWORD, listOf()))
+    performPost("$AUTH_PATH$REFRESH_PATH", RefreshTokenRequest(authResponse.refreshToken))
+      .andExpect(status().isForbidden)
+  }
+
   test("request with invalid bearer token format should return 403") {
     val authResponse = authenticate()
     performGet(INFO_PATH, INVALID_TOKEN_PREFIX, authResponse.accessToken)
+      .andExpect(status().isForbidden)
+  }
+
+  test("request with expired access token should return 403") {
+    authenticate()
+    performGet(INFO_PATH, EXPIRED_ACCESS_TOKEN)
+      .andExpect(status().isForbidden)
+  }
+
+  test("request with expired refresh token should return 403") {
+    authenticate()
+    performPost("$AUTH_PATH$REFRESH_PATH", RefreshTokenRequest(EXPIRED_REFRESH_TOKEN))
       .andExpect(status().isForbidden)
   }
 })
