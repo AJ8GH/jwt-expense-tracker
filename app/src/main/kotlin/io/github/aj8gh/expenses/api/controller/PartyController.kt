@@ -3,9 +3,11 @@ package io.github.aj8gh.expenses.api.controller
 import io.github.aj8gh.expenses.api.model.party.CreatePartyRequest
 import io.github.aj8gh.expenses.persistence.model.PartyEntity
 import io.github.aj8gh.expenses.persistence.repository.PartyRepository
+import org.springframework.http.HttpStatus.CREATED
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 const val PARTIES_PATH = "/parties"
@@ -17,6 +19,7 @@ class PartyController(
 ) {
 
   @PostMapping
+  @ResponseStatus(CREATED)
   fun create(
     @RequestBody request: CreatePartyRequest,
   ) = partyRepository.save(

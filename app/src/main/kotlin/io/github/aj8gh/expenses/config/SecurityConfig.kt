@@ -26,7 +26,6 @@ const val ERROR = "/error"
 @EnableWebSecurity
 class SecurityConfig(
   @Value("\${auth.password.strength}") private val passwordStrength: Int,
-  @Value("\${server.servlet.context-path}") private val basePath: String,
 ) {
 
   @Bean
@@ -42,9 +41,7 @@ class SecurityConfig(
         .anyRequest()
         .fullyAuthenticated()
     }
-    .sessionManagement {
-      it.sessionCreationPolicy(STATELESS)
-    }
+    .sessionManagement { it.sessionCreationPolicy(STATELESS) }
     .authenticationProvider(authenticationProvider)
     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
     .build()
