@@ -7,31 +7,8 @@ plugins {
   alias(libs.plugins.spring.dependency.management)
 }
 
-repositories {
-  mavenLocal()
-  mavenCentral()
-  gradlePluginPortal()
-}
-
-group = properties["project.group.id"]!!
-version = properties["project.version"]!!
-
-dependencies {
-  implementation(libs.bundles.implementation)
-  runtimeOnly(libs.bundles.runtimeOnly)
-  testImplementation(libs.bundles.test.implementation)
-}
-
 kotlin {
-  jvmToolchain(libs.versions.java.get().toInt())
-}
-
-tasks.test {
-  useJUnitPlatform()
-  finalizedBy(
-    tasks.koverHtmlReport,
-    tasks.koverXmlReport,
-  )
+  jvmToolchain(rootProject.libs.versions.java.get().toInt())
 }
 
 kover {
@@ -44,4 +21,23 @@ kover {
       }
     }
   }
+}
+
+tasks.test {
+  useJUnitPlatform()
+  finalizedBy(
+    tasks.koverHtmlReport,
+    tasks.koverXmlReport,
+  )
+}
+
+allprojects {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    gradlePluginPortal()
+  }
+
+  group = properties["project.group.id"]!!
+  version = properties["project.version"]!!
 }

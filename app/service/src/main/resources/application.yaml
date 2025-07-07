@@ -1,0 +1,44 @@
+db:
+  name: jwt_expense_tracker
+  host: localhost
+
+auth:
+  token:
+    ttl-millis:
+      jwt: 300000 # 5 minutes
+      refresh: 2592000000 # 30 days
+  password:
+    strength: 10
+
+spring:
+  security:
+    user:
+      name: user
+  config:
+    import: optional:secrets.yaml
+  output:
+    ansi:
+      enabled: ALWAYS
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:${db.host}}:5432/${POSTGRES_DB:${db.name}}
+    username: ${POSTGRES_USER:${db.name}}
+    password: ${POSTGRES_PASSWORD:${db.password}}
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  servlet:
+    context-path: "/api"
+
+logging:
+  level:
+    org.springframework: DEBUG
