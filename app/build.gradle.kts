@@ -11,6 +11,13 @@ kotlin {
   jvmToolchain(rootProject.libs.versions.java.get().toInt())
 }
 
+dependencies {
+  kover(project(":app:component-test"))
+  kover(project(":app:api"))
+  kover(project(":app:persistence"))
+  kover(project(":app:service"))
+}
+
 kover {
   reports {
     filters {
@@ -40,4 +47,8 @@ allprojects {
 
   group = properties["project.group.id"]!!
   version = properties["project.version"]!!
+}
+
+tasks.bootJar {
+  mainClass = properties["project.main-class"].toString()
 }

@@ -16,7 +16,11 @@ dependencies {
   testRuntimeOnly(rootProject.libs.bundles.runtimeOnly)
 }
 
-
 tasks.test {
   useJUnitPlatform()
+  finalizedBy(tasks.koverVerify)
+}
+
+tasks.bootJar {
+  enabled = false
 }
