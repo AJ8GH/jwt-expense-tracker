@@ -1,3 +1,6 @@
+import io.github.aj8gh.expenses.plugin.moduleId
+import io.github.aj8gh.expenses.plugin.prop
+
 plugins {
   alias(libs.plugins.kotlin.jpa)
   alias(libs.plugins.kotlin.jvm)
@@ -12,22 +15,10 @@ kotlin {
 }
 
 dependencies {
-  kover(project(":app:component-test"))
-  kover(project(":app:api"))
-  kover(project(":app:persistence"))
-  kover(project(":app:service"))
-}
-
-kover {
-  reports {
-    filters {
-      excludes {
-        classes(
-          properties["project.main-class"].toString()
-        )
-      }
-    }
-  }
+  kover(project(moduleId("component-test")))
+  kover(project(moduleId("business")))
+  kover(project(moduleId("persistence")))
+  kover(project(moduleId("presentation")))
 }
 
 tasks.test {
@@ -38,6 +29,23 @@ tasks.test {
   )
 }
 
+val mainClassValue = prop("project.main-class")
+
+kover {
+  reports {
+    filters {
+      excludes {
+        classes(mainClassValue)
+      }
+    }
+  }
+}
+
+
+tasks.bootJar {
+  mainClass = mainClassValue
+}
+
 allprojects {
   repositories {
     mavenLocal()
@@ -45,10 +53,6 @@ allprojects {
     gradlePluginPortal()
   }
 
-  group = properties["project.group.id"]!!
-  version = properties["project.version"]!!
-}
-
-tasks.bootJar {
-  mainClass = properties["project.main-class"].toString()
+  group = prop("project.group.id")
+  version = prop("project.version")
 }

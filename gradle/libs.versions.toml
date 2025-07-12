@@ -12,7 +12,6 @@ kotlin-wiremock = '2.1.1'
 kover = '0.9.1'
 liquibase = '4.32.0'
 mockk = '1.14.2'
-okhttp = '5.0.0-alpha.16'
 postgresql = '42.7.7'
 spring-boot = '3.5.0'
 spring-dependency-management = '1.1.7'
@@ -34,7 +33,6 @@ jjwt-jackson = { group = 'io.jsonwebtoken', name = 'jjwt-jackson', version.ref =
 kotlin-logging-jvm = { group = 'io.github.oshai', name = 'kotlin-logging-jvm', version.ref = 'kotlin-logging' }
 kotlin-reflect = { group = 'org.jetbrains.kotlin', name = 'kotlin-reflect' }
 liquibase-core = { group = 'org.liquibase', name = 'liquibase-core', version.ref = 'liquibase' }
-okhttp = { group = 'com.squareup.okhttp3', name = 'okhttp', version.ref = 'okhttp' }
 postgresql = { group = 'org.postgresql', name = 'postgresql', version.ref = 'postgresql' }
 spring-boot-starter-actuator = { group = 'org.springframework.boot', name = 'spring-boot-starter-actuator' }
 spring-boot-starter-data-jpa = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-jpa' }

@@ -1,3 +1,5 @@
+import io.github.aj8gh.expenses.plugin.moduleId
+
 plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.kotlin.spring)
@@ -8,9 +10,10 @@ plugins {
 
 
 dependencies {
+  // implementation(moduleId("business"))
+  implementation(project(":app:service"))
   implementation(rootProject.libs.bundles.api)
   implementation(rootProject.libs.bundles.common)
-  implementation(project(":app:service"))
   runtimeOnly(rootProject.libs.bundles.runtimeOnly)
 }
 

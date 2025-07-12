@@ -1,3 +1,5 @@
+import io.github.aj8gh.expenses.plugin.moduleId
+
 plugins {
   alias(libs.plugins.kotlin.jpa)
   alias(libs.plugins.kotlin.jvm)
@@ -8,9 +10,9 @@ plugins {
 }
 
 dependencies {
-  testImplementation(project(":app:api"))
-  testImplementation(project(":app:service"))
-  testImplementation(project(":app:persistence"))
+  testImplementation(project(moduleId("persistence")))
+  testImplementation(project(moduleId("presentation")))
+  testImplementation(project(moduleId("business")))
   testImplementation(rootProject.libs.bundles.common)
   testImplementation(rootProject.libs.bundles.componentTest)
   testRuntimeOnly(rootProject.libs.bundles.runtimeOnly)

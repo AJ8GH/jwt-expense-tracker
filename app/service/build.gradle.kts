@@ -1,3 +1,5 @@
+import io.github.aj8gh.expenses.plugin.moduleId
+
 plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.kotlin.spring)
@@ -9,6 +11,6 @@ plugins {
 dependencies {
   implementation(rootProject.libs.bundles.service)
   implementation(rootProject.libs.bundles.common)
-  implementation(project(":app:persistence"))
+  implementation(project(moduleId("persistence")))
   runtimeOnly(rootProject.libs.bundles.runtimeOnly)
 }
