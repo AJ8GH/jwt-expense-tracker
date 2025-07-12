@@ -1,3 +1,7 @@
+import io.github.aj8gh.expenses.plugin.BUSINESS_MODULE
+import io.github.aj8gh.expenses.plugin.COMPONENT_TEST_MODULE
+import io.github.aj8gh.expenses.plugin.PERSISTENCE_MODULE
+import io.github.aj8gh.expenses.plugin.PRESENTATION_MODULE
 import io.github.aj8gh.expenses.plugin.moduleId
 import io.github.aj8gh.expenses.plugin.prop
 
@@ -15,10 +19,10 @@ kotlin {
 }
 
 dependencies {
-  kover(project(moduleId("component-test")))
-  kover(project(moduleId("business")))
-  kover(project(moduleId("persistence")))
-  kover(project(moduleId("presentation")))
+  kover(project(moduleId(COMPONENT_TEST_MODULE)))
+  kover(project(moduleId(BUSINESS_MODULE)))
+  kover(project(moduleId(PERSISTENCE_MODULE)))
+  kover(project(moduleId(PRESENTATION_MODULE)))
 }
 
 tasks.test {

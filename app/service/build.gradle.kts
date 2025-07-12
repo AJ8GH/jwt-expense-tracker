@@ -1,3 +1,4 @@
+import io.github.aj8gh.expenses.plugin.PERSISTENCE_MODULE
 import io.github.aj8gh.expenses.plugin.moduleId
 
 plugins {
@@ -9,8 +10,8 @@ plugins {
 }
 
 dependencies {
+  implementation(project(moduleId(PERSISTENCE_MODULE)))
   implementation(rootProject.libs.bundles.service)
   implementation(rootProject.libs.bundles.common)
-  implementation(project(moduleId("persistence")))
   runtimeOnly(rootProject.libs.bundles.runtimeOnly)
 }

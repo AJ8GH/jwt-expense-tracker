@@ -1,3 +1,6 @@
+import io.github.aj8gh.expenses.plugin.BUSINESS_MODULE
+import io.github.aj8gh.expenses.plugin.PERSISTENCE_MODULE
+import io.github.aj8gh.expenses.plugin.PRESENTATION_MODULE
 import io.github.aj8gh.expenses.plugin.moduleId
 
 plugins {
@@ -10,9 +13,9 @@ plugins {
 }
 
 dependencies {
-  testImplementation(project(moduleId("persistence")))
-  testImplementation(project(moduleId("presentation")))
-  testImplementation(project(moduleId("business")))
+  testImplementation(project(moduleId(PERSISTENCE_MODULE)))
+  testImplementation(project(moduleId(PRESENTATION_MODULE)))
+  testImplementation(project(moduleId(BUSINESS_MODULE)))
   testImplementation(rootProject.libs.bundles.common)
   testImplementation(rootProject.libs.bundles.componentTest)
   testRuntimeOnly(rootProject.libs.bundles.runtimeOnly)

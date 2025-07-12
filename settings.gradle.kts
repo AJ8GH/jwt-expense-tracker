@@ -1,5 +1,4 @@
 rootProject.name = prop("project.name")
-
 val rootModule = prop("module.root")
 
 listOf(

@@ -1,3 +1,4 @@
+import io.github.aj8gh.expenses.plugin.BUSINESS_MODULE
 import io.github.aj8gh.expenses.plugin.moduleId
 
 plugins {
@@ -8,10 +9,8 @@ plugins {
   alias(libs.plugins.spring.dependency.management)
 }
 
-
 dependencies {
-  // implementation(moduleId("business"))
-  implementation(project(":app:service"))
+  implementation(project(moduleId(BUSINESS_MODULE)))
   implementation(rootProject.libs.bundles.api)
   implementation(rootProject.libs.bundles.common)
   runtimeOnly(rootProject.libs.bundles.runtimeOnly)
