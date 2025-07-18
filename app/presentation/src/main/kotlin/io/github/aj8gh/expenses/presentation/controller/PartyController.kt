@@ -20,7 +20,6 @@ class PartyController(
 
   @PostMapping
   @ResponseStatus(CREATED)
-  fun create(
-    @RequestBody request: CreatePartyRequest,
-  ) = toResponse(service.create(fromRequest(request)))
+  fun create(@RequestBody request: CreatePartyRequest) =
+    toResponse(service.create(fromRequest(request)))
 }

@@ -22,12 +22,10 @@ class AuthController(
 ) {
 
   @PostMapping
-  fun authenticate(
-    @RequestBody request: AuthenticationRequestDto,
-  ) = toDto(authService.authenticate(fromDto(request)))
+  fun authenticate(@RequestBody request: AuthenticationRequestDto) =
+    toDto(authService.authenticate(fromDto(request)))
 
   @PostMapping(REFRESH_PATH)
-  fun refresh(
-    @RequestBody request: RefreshTokenRequestDto,
-  ) = toDto(authService.refreshAccessToken(fromDto(request)))
+  fun refresh(@RequestBody request: RefreshTokenRequestDto) =
+    toDto(authService.refreshAccessToken(fromDto(request)))
 }

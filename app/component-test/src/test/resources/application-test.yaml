@@ -15,6 +15,6 @@ auth:
   jwt:
     secret: "38801151bad587a8888cf9f48524db34480c50eed3bdba7a438305c8951ba790"
 
-# logging:
-#   level:
-#     org.springframework: DEBUG
+logging:
+  level:
+    org.springframework: DEBUG

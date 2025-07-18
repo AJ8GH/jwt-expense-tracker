@@ -50,6 +50,8 @@ tasks.bootJar {
   mainClass = mainClassValue
 }
 
+val junitJupiterVersion = libs.versions.junit.jupiter.get()
+
 allprojects {
   repositories {
     mavenLocal()
@@ -59,4 +61,5 @@ allprojects {
 
   group = prop("project.group.id")
   version = prop("project.version")
+  extra["junit-jupiter.version"] = junitJupiterVersion
 }

@@ -25,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig(
   @Value("\${auth.password.strength}") private val passwordStrength: Int,
+  @Value("\${server.servlet.context-path}") private val contextPath: String,
 ) {
 
   @Bean
@@ -35,7 +36,13 @@ class SecurityConfig(
   ): DefaultSecurityFilterChain = http
     .csrf { it.disable() }
     .authorizeHttpRequests {
-      it.requestMatchers(PARTIES_PATH, AUTH_PATH, "$AUTH_PATH$WILDCARD_PATH", ERROR_PATH)
+      it.requestMatchers(
+        PARTIES_PATH,
+        AUTH_PATH,
+        "$contextPath$AUTH_PATH",
+        "$AUTH_PATH$WILDCARD_PATH",
+        ERROR_PATH
+      )
         .permitAll()
         .anyRequest()
         .fullyAuthenticated()
