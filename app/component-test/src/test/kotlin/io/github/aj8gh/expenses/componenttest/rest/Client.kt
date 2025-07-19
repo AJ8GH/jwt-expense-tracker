@@ -7,12 +7,8 @@ import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClient.RequestHeadersSpec
 import kotlin.reflect.KClass
 
-private const val URL = "http://localhost:"
-
 class Client(
   private val restClient: RestClient,
-  private val port: Int,
-  private val contextPath: String,
   private val scenarioContext: ScenarioContext,
 ) {
 
@@ -22,7 +18,7 @@ class Client(
     responseType: KClass<T>,
     token: String? = null,
   ) = restClient.post()
-    .uri("$URL$port$contextPath$path")
+    .uri(path)
     .body(content)
     .let { makeRequest(it, token, responseType) }
 
@@ -31,7 +27,7 @@ class Client(
     responseType: KClass<T>,
     token: String? = null,
   ) = restClient.get()
-    .uri("$URL$port$contextPath$path")
+    .uri(path)
     .let { makeRequest(it, token, responseType) }
 
   private fun <T : Any> makeRequest(

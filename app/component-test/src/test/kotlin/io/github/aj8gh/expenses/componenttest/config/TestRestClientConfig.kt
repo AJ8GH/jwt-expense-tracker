@@ -17,15 +17,16 @@ import org.springframework.web.client.RestClient
 class TestRestClientConfig {
 
   @Bean
-  fun client(
-    @LocalServerPort port: Int,
-    restClient: RestClient,
-    scenarioContext: ScenarioContext,
-    @Value("\${server.servlet.context-path}") contextPath: String,
-  ) = Client(restClient, port, contextPath, scenarioContext)
+  fun client(restClient: RestClient, scenarioContext: ScenarioContext) =
+    Client(restClient, scenarioContext)
 
   @Bean
-  fun testRestClient(builder: RestClient.Builder): RestClient = builder
+  fun testRestClient(
+    @LocalServerPort port: Int,
+    @Value("\${server.servlet.context-path}") contextPath: String,
+    builder: RestClient.Builder,
+  ): RestClient = builder
+    .baseUrl("http://localhost:$port$contextPath")
     .defaultHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
     .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
     .build()
