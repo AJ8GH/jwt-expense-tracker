@@ -11,9 +11,7 @@ class Aliases(
 
   fun get(key: String) = aliases[key]
 
-  fun put(key: String, value: UUID) =
-    run { aliases[key] = value }
+  fun put(key: String, value: UUID) = run { aliases[key] = value }
 
-  fun getOrCreate(key: String) =
-    aliases.computeIfAbsent(key) { randomUUID() }
+  fun getOrCreate(key: String) = aliases.computeIfAbsent(key) { randomUUID() }
 }

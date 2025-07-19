@@ -1,5 +1,6 @@
 package io.github.aj8gh.expenses.componenttest.config
 
+import io.github.aj8gh.expenses.componenttest.context.ScenarioContext
 import io.github.aj8gh.expenses.componenttest.rest.Client
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.TestConfiguration
@@ -19,8 +20,9 @@ class TestRestClientConfig {
   fun client(
     @LocalServerPort port: Int,
     restClient: RestClient,
+    scenarioContext: ScenarioContext,
     @Value("\${server.servlet.context-path}") contextPath: String,
-  ) = Client(restClient, port, contextPath)
+  ) = Client(restClient, port, contextPath, scenarioContext)
 
   @Bean
   fun testRestClient(builder: RestClient.Builder): RestClient = builder

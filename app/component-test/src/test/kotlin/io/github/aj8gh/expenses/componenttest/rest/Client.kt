@@ -2,8 +2,10 @@ package io.github.aj8gh.expenses.componenttest.rest
 
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.AUTHORIZATION
 import io.github.aj8gh.expenses.business.service.security.BEARER
-import org.springframework.http.ResponseEntity
+import io.github.aj8gh.expenses.componenttest.context.ScenarioContext
 import org.springframework.web.client.RestClient
+import org.springframework.web.client.RestClient.RequestHeadersSpec
+import kotlin.reflect.KClass
 
 private const val URL = "http://localhost:"
 
@@ -11,19 +13,40 @@ class Client(
   private val restClient: RestClient,
   private val port: Int,
   private val contextPath: String,
+  private val scenarioContext: ScenarioContext,
 ) {
 
   fun <T : Any> post(
     path: String,
     content: Any,
+    responseType: KClass<T>,
     token: String? = null,
-    responseType: Class<T>,
-  ): ResponseEntity<T> = restClient.post()
+  ) = restClient.post()
     .uri("$URL$port$contextPath$path")
-    .body(content).let {
+    .body(content)
+    .let { makeRequest(it, token, responseType) }
+
+  fun <T : Any> get(
+    path: String,
+    responseType: KClass<T>,
+    token: String? = null,
+  ) = restClient.get()
+    .uri("$URL$port$contextPath$path")
+    .let { makeRequest(it, token, responseType) }
+
+  private fun <T : Any> makeRequest(
+    spec: RequestHeadersSpec<*>,
+    token: String?,
+    responseType: KClass<T>,
+  ) = withTokenIfPresent(spec, token)
+    .retrieve()
+    .toEntity(responseType.java)
+    .also { scenarioContext.responseEntity = it }
+
+  private fun withTokenIfPresent(spec: RequestHeadersSpec<*>, token: String?) =
+    spec.let {
       token?.let { token ->
         it.header(AUTHORIZATION, "$BEARER$token")
       } ?: it
-    }.retrieve()
-    .toEntity(responseType)
+    }
 }

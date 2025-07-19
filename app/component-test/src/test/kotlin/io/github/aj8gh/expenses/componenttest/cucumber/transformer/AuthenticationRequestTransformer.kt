@@ -4,9 +4,8 @@ import io.cucumber.java.DataTableType
 import io.github.aj8gh.expenses.business.model.auth.AuthenticationRequest
 import io.github.aj8gh.expenses.componenttest.constant.DEFAULT_PASSWORD
 import io.github.aj8gh.expenses.componenttest.constant.DEFAULT_USERNAME
-
-private const val USERNAME = "username"
-private const val PASSWORD = "password"
+import io.github.aj8gh.expenses.componenttest.constant.PASSWORD
+import io.github.aj8gh.expenses.componenttest.constant.USERNAME
 
 class AuthenticationRequestTransformer {
 
