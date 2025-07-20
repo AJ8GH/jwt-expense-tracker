@@ -1,7 +1,6 @@
 package io.github.aj8gh.expenses.presentation.model.party
 
 import io.github.aj8gh.expenses.business.model.party.Party
-import io.github.aj8gh.expenses.business.model.party.Party.Status
 import java.util.*
 
 data class PartyResponse(

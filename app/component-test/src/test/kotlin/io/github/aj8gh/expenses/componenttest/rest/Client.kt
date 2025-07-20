@@ -4,9 +4,11 @@ import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders
 import io.github.aj8gh.expenses.business.service.security.BEARER
 import io.github.aj8gh.expenses.componenttest.context.ScenarioContext
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpRequest
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.client.ClientHttpResponse
+import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClient.RequestHeadersSpec
 import kotlin.reflect.KClass
@@ -32,8 +34,10 @@ class Client(
     path: String,
     responseType: KClass<T>,
     token: String? = null,
+    headers: Map<String, List<String>> = mapOf(),
   ) = restClient.get()
     .uri(path)
+    .headers { toHeaders(headers) }
     .let { makeRequest(it, token, responseType) }
 
   private fun <T : Any> makeRequest(
@@ -58,5 +62,9 @@ class Client(
     res: ClientHttpResponse,
   ) = logger.error {
     """Rest client HTTP error, url=${req.uri}, method=${req.method}, statusCode=${res.statusCode} : ${res.statusText}, responseBody=${res.body}"""
+  }
+
+  private fun toHeaders(headers: Map<String, List<String>>): HttpHeaders {
+    return HttpHeaders(MultiValueMap.fromMultiValue(headers))
   }
 }
