@@ -3,9 +3,15 @@ package io.github.aj8gh.expenses.componenttest.rest
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.AUTHORIZATION
 import io.github.aj8gh.expenses.business.service.security.BEARER
 import io.github.aj8gh.expenses.componenttest.context.ScenarioContext
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.http.HttpRequest
+import org.springframework.http.HttpStatusCode
+import org.springframework.http.client.ClientHttpResponse
 import org.springframework.web.client.RestClient
 import org.springframework.web.client.RestClient.RequestHeadersSpec
 import kotlin.reflect.KClass
+
+private val logger = KotlinLogging.logger {}
 
 class Client(
   private val restClient: RestClient,
@@ -36,6 +42,7 @@ class Client(
     responseType: KClass<T>,
   ) = withTokenIfPresent(spec, token)
     .retrieve()
+    .onStatus(HttpStatusCode::isError, this::errorHandler)
     .toEntity(responseType.java)
     .also { scenarioContext.responseEntity = it }
 
@@ -45,4 +52,11 @@ class Client(
         it.header(AUTHORIZATION, "$BEARER$token")
       } ?: it
     }
+
+  private fun errorHandler(
+    req: HttpRequest,
+    res: ClientHttpResponse,
+  ) = logger.error {
+    """Rest client HTTP error, url=${req.uri}, method=${req.method}, statusCode=${res.statusCode} : ${res.statusText}, responseBody=${res.body}"""
+  }
 }

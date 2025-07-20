@@ -13,6 +13,7 @@ class ScenarioContext(
   var partyAuthRequests: MutableMap<UUID, AuthenticationRequest> = mutableMapOf(),
   var partyAuthResponses: MutableMap<UUID, AuthenticationResponse> = mutableMapOf(),
   var partyRefreshResponses: MutableMap<UUID, RefreshTokenResponse> = mutableMapOf(),
+  var tokens: MutableMap<String, String> = mutableMapOf(),
 ) {
 
   @Suppress("UNCHECKED_CAST")
@@ -21,4 +22,5 @@ class ScenarioContext(
   fun accessToken(party: UUID) = partyAuthResponses[party]!!.accessToken
   fun refreshToken(party: UUID) = partyAuthResponses[party]!!.refreshToken
   fun refreshedAccessToken(party: UUID) = partyRefreshResponses[party]!!.accessToken
+  fun token(alias: String) = tokens[alias]!!
 }

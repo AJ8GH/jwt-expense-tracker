@@ -17,10 +17,10 @@ class RequestSteps(
     responseType = String::class
   )
 
-  @When("GET request using refreshed access token for {alias} is made to {string}")
-  fun getRequestIsMadeWithRefreshedToken(party: UUID, path: String) = client.get(
+  @When("GET request is made to {string} with token {tokenAlias}")
+  fun getRequestIsMade(path: String, token: String?) = client.get(
     path = path,
-    token = scenarioContext.refreshedAccessToken(party),
+    token = token,
     responseType = String::class
   )
 }

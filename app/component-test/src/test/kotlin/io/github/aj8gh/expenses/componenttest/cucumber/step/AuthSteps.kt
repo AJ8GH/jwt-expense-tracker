@@ -19,17 +19,20 @@ class AuthSteps(
   private val partySteps: PartySteps,
 ) {
 
-  @Given("party {string} is authenticated")
-  fun partyIsAuthenticated(alias: String) {
+  @Given("party {string} is authenticated with tokens: access {string}, refresh {string}")
+  fun partyIsAuthenticated(alias: String, access: String, refresh: String) {
     val party = partySteps.createParty(alias).id
-    authenticate(party)
+    val authResponse = authenticate(party)
+    scenarioContext.tokens[access] = authResponse.accessToken
+    scenarioContext.tokens[refresh] = authResponse.refreshToken
   }
 
   @When("an auth request is made for {alias}")
   fun sendAuthRequest(party: UUID) = authenticate(party)
 
-  @When("an auth refresh request is made for {alias}")
-  fun sendAuthRefreshRequest(party: UUID) = refresh(party)
+  @When("an auth refresh request is made for {alias} returning access token {string}")
+  fun sendAuthRefreshRequest(party: UUID, alias: String) = refresh(party)
+    .let { scenarioContext.tokens[alias] = it.accessToken }
 
   @Then("the response has access and refresh tokens")
   fun responseJsonPathIsNotEmpty() {
@@ -42,15 +45,13 @@ class AuthSteps(
     path = AUTH_PATH,
     content = scenarioContext.authRequest(party),
     responseType = AuthenticationResponse::class,
-  ).let {
-    scenarioContext.partyAuthResponses[party] = it.body!!
-  }
+  ).let { it.body!! }
+    .also { scenarioContext.partyAuthResponses[party] = it }
 
   private fun refresh(party: UUID) = client.post(
     path = "$AUTH_PATH$REFRESH_PATH",
     content = RefreshTokenRequest(scenarioContext.refreshToken(party)),
     responseType = RefreshTokenResponse::class,
-  ).let {
-    scenarioContext.partyRefreshResponses[party] = it.body!!
-  }
+  ).let { it.body!! }
+    .also { scenarioContext.partyRefreshResponses[party] = it }
 }
