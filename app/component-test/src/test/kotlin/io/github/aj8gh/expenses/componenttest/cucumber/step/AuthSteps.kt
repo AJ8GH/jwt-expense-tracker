@@ -4,7 +4,10 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.github.aj8gh.expenses.business.constant.AUTH_PATH
+import io.github.aj8gh.expenses.business.constant.REFRESH_PATH
 import io.github.aj8gh.expenses.business.model.auth.AuthenticationResponse
+import io.github.aj8gh.expenses.business.model.auth.RefreshTokenRequest
+import io.github.aj8gh.expenses.business.model.auth.RefreshTokenResponse
 import io.github.aj8gh.expenses.componenttest.context.ScenarioContext
 import io.github.aj8gh.expenses.componenttest.rest.Client
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -25,12 +28,8 @@ class AuthSteps(
   @When("an auth request is made for {alias}")
   fun sendAuthRequest(party: UUID) = authenticate(party)
 
-  @When("authenticated GET request for {alias} is made to {string}")
-  fun getRequestIsMade(party: UUID, path: String) = client.get(
-    path = path,
-    token = scenarioContext.accessToken(party),
-    responseType = String::class
-  )
+  @When("an auth refresh request is made for {alias}")
+  fun sendAuthRefreshRequest(party: UUID) = refresh(party)
 
   @Then("the response has access and refresh tokens")
   fun responseJsonPathIsNotEmpty() {
@@ -45,5 +44,13 @@ class AuthSteps(
     responseType = AuthenticationResponse::class,
   ).let {
     scenarioContext.partyAuthResponses[party] = it.body!!
+  }
+
+  private fun refresh(party: UUID) = client.post(
+    path = "$AUTH_PATH$REFRESH_PATH",
+    content = RefreshTokenRequest(scenarioContext.refreshToken(party)),
+    responseType = RefreshTokenResponse::class,
+  ).let {
+    scenarioContext.partyRefreshResponses[party] = it.body!!
   }
 }

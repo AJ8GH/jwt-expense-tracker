@@ -8,5 +8,11 @@ Feature: Access token
 
   Scenario: Authenticated user can access secured endpoint
     Given party "PTY1" is authenticated
-    When authenticated GET request for PTY1 is made to "/actuator/info"
+    When authenticated GET request for PTY1 is made to "/expenses"
+    Then the response status is 200
+
+  Scenario: Refresh token generates new access token
+    Given party "PTY1" is authenticated
+    And an auth refresh request is made for PTY1
+    When GET request using refreshed access token for PTY1 is made to "/expenses"
     Then the response status is 200

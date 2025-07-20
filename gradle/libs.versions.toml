@@ -1,98 +1,105 @@
 [versions]
-java = '21'
-kotlin = '2.1.21'
+java = "21"
+kotlin = "2.1.21"
 
-cucumber = "7.24.0"
-embedded-postgres = '2.1.0'
-jaxb = '4.0.5'
-jjwt = '0.12.6'
-junit-jupiter = '5.13.3'
-junit-platform = '1.13.3'
-kotest = '5.9.1'
-kotlin-logging = '7.0.7'
-kover = '0.9.1'
-liquibase = '4.32.0'
-postgresql = '42.7.7'
-spring-boot = '3.5.3'
-spring-dependency-management = '1.1.7'
+cucumber = "7.26.0"
+embedded-postgres = "2.1.0"
+jaxb = "4.0.5"
+jjwt = "0.12.6"
+junit-jupiter = "5.13.3"
+junit-platform = "1.13.3"
+kotest = "5.9.1"
+kotlin-logging = "7.0.7"
+kover = "0.9.1"
+liquibase = "4.32.0"
+postgresql = "42.7.7"
+spring-boot = "3.5.3"
+spring-dependency-management = "1.1.7"
 
 [plugins]
-kotlin-jpa = { id = 'org.jetbrains.kotlin.plugin.jpa', version.ref = 'kotlin' }
-kotlin-jvm = { id = 'org.jetbrains.kotlin.jvm', version.ref = 'kotlin' }
-kotlin-spring = { id = 'org.jetbrains.kotlin.plugin.spring', version.ref = 'kotlin' }
-kover = { id = 'org.jetbrains.kotlinx.kover', version.ref = 'kover' }
-spring-boot = { id = 'org.springframework.boot', version.ref = 'spring-boot' }
-spring-dependency-management = { id = 'io.spring.dependency-management', version.ref = 'spring-dependency-management' }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
 
 [libraries]
-jaxb-core = { group = 'org.glassfish.jaxb', name = 'jaxb-core', version.ref = 'jaxb' }
-jaxb-runtime = { group = 'org.glassfish.jaxb', name = 'jaxb-runtime', version.ref = 'jaxb' }
-jjwt-api = { group = 'io.jsonwebtoken', name = 'jjwt-api', version.ref = 'jjwt' }
-jjwt-impl = { group = 'io.jsonwebtoken', name = 'jjwt-impl', version.ref = 'jjwt' }
-jjwt-jackson = { group = 'io.jsonwebtoken', name = 'jjwt-jackson', version.ref = 'jjwt' }
-kotlin-logging-jvm = { group = 'io.github.oshai', name = 'kotlin-logging-jvm', version.ref = 'kotlin-logging' }
-kotlin-reflect = { group = 'org.jetbrains.kotlin', name = 'kotlin-reflect' }
-liquibase-core = { group = 'org.liquibase', name = 'liquibase-core', version.ref = 'liquibase' }
-postgresql = { group = 'org.postgresql', name = 'postgresql', version.ref = 'postgresql' }
-spring-boot-starter-actuator = { group = 'org.springframework.boot', name = 'spring-boot-starter-actuator' }
-spring-boot-starter-data-jpa = { group = 'org.springframework.boot', name = 'spring-boot-starter-data-jpa' }
-spring-boot-starter-security = { group = 'org.springframework.boot', name = 'spring-boot-starter-security' }
-spring-boot-starter-web = { group = 'org.springframework.boot', name = 'spring-boot-starter-web' }
-txw2 = { group = 'org.glassfish.jaxb', name = 'txw2', version.ref = 'jaxb' }
+jaxb-core = { group = "org.glassfish.jaxb", name = "jaxb-core", version.ref = "jaxb" }
+jaxb-runtime = { group = "org.glassfish.jaxb", name = "jaxb-runtime", version.ref = "jaxb" }
+jjwt-api = { group = "io.jsonwebtoken", name = "jjwt-api", version.ref = "jjwt" }
+jjwt-impl = { group = "io.jsonwebtoken", name = "jjwt-impl", version.ref = "jjwt" }
+jjwt-jackson = { group = "io.jsonwebtoken", name = "jjwt-jackson", version.ref = "jjwt" }
+kotlin-logging-jvm = { group = "io.github.oshai", name = "kotlin-logging-jvm", version.ref = "kotlin-logging" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect" }
+liquibase-core = { group = "org.liquibase", name = "liquibase-core", version.ref = "liquibase" }
+postgresql = { group = "org.postgresql", name = "postgresql", version.ref = "postgresql" }
+spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
+spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+txw2 = { group = "org.glassfish.jaxb", name = "txw2", version.ref = "jaxb" }
 
 cucumber-bom = { group = "io.cucumber", name = "cucumber-bom", version.ref = "cucumber" }
-cucumber-junit = { group = "io.cucumber", name = "cucumber-junit" }
 cucumber-java = { group = "io.cucumber", name = "cucumber-java" }
+cucumber-junit-platform-engine = { group = "io.cucumber", name = "cucumber-junit-platform-engine" }
 cucumber-spring = { group = "io.cucumber", name = "cucumber-spring" }
 junit-platform-engine = { group = "org.junit.platform", name = "junit-platform-engine", version.ref = "junit-platform" }
 junit-platform-suite = { group = "org.junit.platform", name = "junit-platform-suite", version.ref = "junit-platform" }
-embedded-postgres = { group = 'io.zonky.test', name = 'embedded-postgres', version.ref = 'embedded-postgres' }
-embedded-database-spring-test = { group = 'io.zonky.test', name = 'embedded-database-spring-test', version.ref = 'embedded-postgres' }
-kotest-assertions-core = { group = 'io.kotest', name = 'kotest-assertions-core', version.ref = 'kotest' }
-spring-boot-starter-test = { group = 'org.springframework.boot', name = 'spring-boot-starter-test' }
-spring-security-test = { group = 'org.springframework.security', name = 'spring-security-test' }
+embedded-postgres = { group = "io.zonky.test", name = "embedded-postgres", version.ref = "embedded-postgres" }
+embedded-database-spring-test = { group = "io.zonky.test", name = "embedded-database-spring-test", version.ref = "embedded-postgres" }
+kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
 
 [bundles]
 common = [
-  'jaxb-core',
-  'jaxb-runtime',
-  'kotlin-logging-jvm',
-  'txw2',
+  "jaxb-core",
+  "jaxb-runtime",
+  "kotlin-logging-jvm",
+  "txw2",
 ]
 
 api = [
-  'spring-boot-starter-actuator',
-  'spring-boot-starter-web',
+  "spring-boot-starter-actuator",
+  "spring-boot-starter-web",
 ]
 
 persistence = [
-  'spring-boot-starter-data-jpa',
+  "spring-boot-starter-data-jpa",
+]
+
+persistence-runtimeOnly = [
+  "postgresql",
 ]
 
 service = [
-  'jjwt-api',
-  'jjwt-impl',
-  'jjwt-jackson',
-  'liquibase-core',
-  'spring-boot-starter-data-jpa',
-  'spring-boot-starter-security',
-  'spring-boot-starter-web',
+  "jjwt-api",
+  "jjwt-impl",
+  "jjwt-jackson",
+  "liquibase-core",
+  "spring-boot-starter-data-jpa",
+  "spring-boot-starter-security",
+  "spring-boot-starter-web",
 ]
 
 runtimeOnly = [
-  'kotlin-reflect',
-  'postgresql',
+  "kotlin-reflect",
 ]
 
 componentTest = [
-  "cucumber-junit",
   "cucumber-java",
+  "cucumber-junit-platform-engine",
   "cucumber-spring",
+  "embedded-database-spring-test",
+  "embedded-postgres",
   "junit-platform-engine",
   "junit-platform-suite",
-  'embedded-database-spring-test',
-  'embedded-postgres',
-  'kotest-assertions-core',
-  'spring-boot-starter-test',
-  'spring-security-test',
+  "kotest-assertions-core",
+  "spring-boot-starter-test",
+  "spring-security-test",
+]
+
+platform = [
+  "cucumber-bom",
 ]

@@ -3,6 +3,7 @@ package io.github.aj8gh.expenses.business.config
 import io.github.aj8gh.expenses.business.constant.AUTH_PATH
 import io.github.aj8gh.expenses.business.constant.ERROR_PATH
 import io.github.aj8gh.expenses.business.constant.PARTIES_PATH
+import io.github.aj8gh.expenses.business.constant.REFRESH_PATH
 import io.github.aj8gh.expenses.business.constant.WILDCARD_PATH
 import io.github.aj8gh.expenses.business.service.security.JwtAuthorizationFilter
 import org.springframework.beans.factory.annotation.Value
@@ -37,11 +38,10 @@ class SecurityConfig(
     .csrf { it.disable() }
     .authorizeHttpRequests {
       it.requestMatchers(
+        ERROR_PATH,
         PARTIES_PATH,
         AUTH_PATH,
-        "$contextPath$AUTH_PATH",
         "$AUTH_PATH$WILDCARD_PATH",
-        ERROR_PATH
       )
         .permitAll()
         .anyRequest()

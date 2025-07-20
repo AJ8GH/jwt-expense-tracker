@@ -19,14 +19,16 @@ import org.springframework.test.context.ActiveProfiles
 private const val TEST_PROFILE = "test"
 private const val CUCUMBER_ENGINE = "cucumber"
 private const val FEATURES_RESOURCE = "features"
+private const val PRETTY_PLUGIN = "pretty"
+private const val USAGE_PLUGIN = "usage"
 
 @Suite
 @ActiveProfiles(TEST_PROFILE)
 @CucumberContextConfiguration
 @IncludeEngines(CUCUMBER_ENGINE)
 @SelectClasspathResource(FEATURES_RESOURCE)
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
-@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "usage")
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = PRETTY_PLUGIN)
+@ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = USAGE_PLUGIN)
 @AutoConfigureEmbeddedDatabase(type = POSTGRES, provider = ZONKY)
 @SpringBootTest(
   webEnvironment = RANDOM_PORT,
@@ -36,4 +38,4 @@ private const val FEATURES_RESOURCE = "features"
     TestRestClientConfig::class,
   ],
 )
-class CucumberConfig
+class CucumberTestRunner

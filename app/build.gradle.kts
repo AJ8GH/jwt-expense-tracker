@@ -45,12 +45,12 @@ kover {
   }
 }
 
-
 tasks.bootJar {
   mainClass = mainClassValue
 }
 
 val junitJupiterVersion = libs.versions.junit.jupiter.get()
+extra["junit-jupiter.version"] = junitJupiterVersion
 
 allprojects {
   repositories {
@@ -61,5 +61,4 @@ allprojects {
 
   group = prop("project.group.id")
   version = prop("project.version")
-  extra["junit-jupiter.version"] = junitJupiterVersion
 }

@@ -11,6 +11,7 @@ dependencies {
   implementation(rootProject.libs.bundles.persistence)
   implementation(rootProject.libs.bundles.common)
   runtimeOnly(rootProject.libs.bundles.runtimeOnly)
+  runtimeOnly(rootProject.libs.bundles.persistence.runtimeOnly)
 }
 
 tasks.bootJar {
