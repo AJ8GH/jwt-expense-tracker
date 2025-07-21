@@ -3,9 +3,9 @@ package io.github.aj8gh.expenses.business.config
 import io.github.aj8gh.expenses.business.constant.AUTH_PATH
 import io.github.aj8gh.expenses.business.constant.ERROR_PATH
 import io.github.aj8gh.expenses.business.constant.PARTIES_PATH
-import io.github.aj8gh.expenses.business.constant.REFRESH_PATH
 import io.github.aj8gh.expenses.business.constant.WILDCARD_PATH
 import io.github.aj8gh.expenses.business.service.security.JwtAuthorizationFilter
+import jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -37,19 +37,21 @@ class SecurityConfig(
   ): DefaultSecurityFilterChain = http
     .csrf { it.disable() }
     .authorizeHttpRequests {
-      it.requestMatchers(
-        ERROR_PATH,
-        PARTIES_PATH,
-        AUTH_PATH,
-        "$AUTH_PATH$WILDCARD_PATH",
-      )
-        .permitAll()
-        .anyRequest()
-        .fullyAuthenticated()
+      it.requestMatchers(ERROR_PATH).permitAll()
+        .requestMatchers(PARTIES_PATH).permitAll()
+        .requestMatchers("$PARTIES_PATH/").permitAll()
+        .requestMatchers(AUTH_PATH).permitAll()
+        .requestMatchers("$AUTH_PATH$WILDCARD_PATH").permitAll()
+        .anyRequest().fullyAuthenticated()
     }
     .sessionManagement { it.sessionCreationPolicy(STATELESS) }
     .authenticationProvider(authenticationProvider)
     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+    .exceptionHandling {
+      it.authenticationEntryPoint { _, response, _ ->
+        response.sendError(SC_UNAUTHORIZED)
+      }
+    }
     .build()
 
   @Bean

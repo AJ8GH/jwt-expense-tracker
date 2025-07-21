@@ -49,8 +49,7 @@ tasks.bootJar {
   mainClass = mainClassValue
 }
 
-val junitJupiterVersion = libs.versions.junit.jupiter.get()
-extra["junit-jupiter.version"] = junitJupiterVersion
+extra["junit-jupiter.version"] = libs.versions.junit.jupiter.get()
 
 allprojects {
   repositories {

@@ -1,6 +1,8 @@
 package io.github.aj8gh.expenses.persistence.model
 
 import jakarta.persistence.Entity
+import jakarta.persistence.EnumType.STRING
+import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
@@ -13,8 +15,8 @@ data class PartyEntity(
   @Id @UuidGenerator val id: UUID? = null,
   val username: String,
   val password: String,
-  val role: Role = Role.USER,
-  val status: Status = Status.ACTIVE,
+  @Enumerated(STRING) val role: Role = Role.USER,
+  @Enumerated(STRING) val status: Status = Status.ACTIVE,
   @CreationTimestamp val createdAt: Instant? = null,
   @UpdateTimestamp val updatedAt: Instant? = null,
 ) {
