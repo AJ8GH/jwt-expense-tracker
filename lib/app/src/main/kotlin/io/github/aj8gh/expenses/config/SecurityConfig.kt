@@ -1,4 +1,4 @@
-package io.github.aj8gh.expenses.business.config
+package io.github.aj8gh.expenses.config
 
 import io.github.aj8gh.expenses.business.constant.AUTH_PATH
 import io.github.aj8gh.expenses.business.constant.ERROR_PATH
@@ -26,7 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfig(
   @Value("\${auth.password.strength}") private val passwordStrength: Int,
-  @Value("\${server.servlet.context-path}") private val contextPath: String,
 ) {
 
   @Bean

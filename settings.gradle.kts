@@ -3,10 +3,11 @@ val rootModule = prop("module.root")
 
 listOf(
   "root",
+  "app",
   "persistence",
   "presentation",
   "business",
-  "component-test"
+  "component-test",
 ).forEach {
   prop("module.$it")
     .let { module ->

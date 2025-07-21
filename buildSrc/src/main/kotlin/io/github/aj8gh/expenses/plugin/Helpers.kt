@@ -6,6 +6,7 @@ import org.gradle.kotlin.dsl.extra
 const val PREFIX = "module."
 const val SEPARATOR = ":"
 const val ROOT_MODULE = "root"
+const val APP_MODULE = "app"
 const val BUSINESS_MODULE = "business"
 const val PERSISTENCE_MODULE = "persistence"
 const val PRESENTATION_MODULE = "presentation"

@@ -1,4 +1,4 @@
-package io.github.aj8gh.expenses.business.config
+package io.github.aj8gh.expenses.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

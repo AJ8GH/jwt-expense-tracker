@@ -1,3 +1,4 @@
+import io.github.aj8gh.expenses.plugin.APP_MODULE
 import io.github.aj8gh.expenses.plugin.BUSINESS_MODULE
 import io.github.aj8gh.expenses.plugin.PERSISTENCE_MODULE
 import io.github.aj8gh.expenses.plugin.PRESENTATION_MODULE
@@ -13,9 +14,10 @@ plugins {
 }
 
 dependencies {
+  testImplementation(project(moduleId(APP_MODULE)))
+  testImplementation(project(moduleId(BUSINESS_MODULE)))
   testImplementation(project(moduleId(PERSISTENCE_MODULE)))
   testImplementation(project(moduleId(PRESENTATION_MODULE)))
-  testImplementation(project(moduleId(BUSINESS_MODULE)))
   libs.bundles.platform.get().forEach { testImplementation(platform(it)) }
   testImplementation(rootProject.libs.bundles.common)
   testImplementation(rootProject.libs.bundles.api)

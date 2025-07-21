@@ -15,3 +15,7 @@ dependencies {
   implementation(rootProject.libs.bundles.common)
   runtimeOnly(rootProject.libs.bundles.runtimeOnly)
 }
+
+tasks.bootJar {
+  enabled = false
+}

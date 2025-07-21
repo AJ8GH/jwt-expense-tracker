@@ -33,20 +33,14 @@ tasks.test {
   )
 }
 
-val mainClassValue = prop("project.main-class")
-
 kover {
   reports {
     filters {
       excludes {
-        classes(mainClassValue)
+        classes(prop("project.main-class"))
       }
     }
   }
-}
-
-tasks.bootJar {
-  mainClass = mainClassValue
 }
 
 extra["junit-jupiter.version"] = libs.versions.junit.jupiter.get()
@@ -60,4 +54,8 @@ allprojects {
 
   group = prop("project.group.id")
   version = prop("project.version")
+}
+
+tasks.bootJar {
+  enabled = false
 }
