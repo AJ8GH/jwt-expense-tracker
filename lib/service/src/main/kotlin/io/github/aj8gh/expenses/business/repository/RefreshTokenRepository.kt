@@ -10,6 +10,7 @@ class RefreshTokenRepository(
   private val tokenRepository: JpaRefreshTokenRepository,
   private val partyRepository: PartyRepository,
 ) {
+
   fun findUserByToken(token: String) = tokenRepository.findUserDetailsByToken(token)
 
   fun save(token: String, userDetails: UserDetails) {
