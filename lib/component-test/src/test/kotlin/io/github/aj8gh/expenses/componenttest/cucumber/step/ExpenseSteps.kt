@@ -10,6 +10,7 @@ import io.github.aj8gh.expenses.persistence.model.ExpenseEntity
 import io.github.aj8gh.expenses.persistence.repository.JpaExpenseRepository
 import io.github.aj8gh.expenses.presentation.model.expense.CreateExpenseRequest
 import io.github.aj8gh.expenses.presentation.model.expense.ExpenseResponse
+import io.github.aj8gh.expenses.presentation.model.expense.ExpensesResponse
 import io.kotest.matchers.equality.shouldBeEqualUsingFields
 import io.kotest.matchers.equals.shouldBeEqual
 
@@ -32,21 +33,34 @@ class ExpenseSteps(
     token = token
   ).body!!.let { aliases.put(alias, it.id) }
 
+  @When("a get all expenses request is sent with token {tokenAlias}")
+  fun getAllExpenses(
+    token: String,
+  ) = client.get(
+    path = EXPENSES_PATH,
+    responseType = ExpensesResponse::class,
+    token = token
+  )
+
   @Then("the following expense is stored")
-  fun expenseReturned(expected: ExpenseEntity) {
-    val actual = repository.findById(expected.id!!).orElseThrow()
-    actual shouldBeEqualUsingFields {
+  fun expenseStored(expected: ExpenseEntity) =
+    repository.findById(expected.id!!).orElseThrow() shouldBeEqualUsingFields {
       excludedProperties = setOf(
         ExpenseEntity::updatedAt,
         ExpenseEntity::createdAt,
       )
       expected
     }
-  }
 
   @Then("the following expense is returned")
-  fun expenseReturned(expected: ExpenseResponse) {
-    val actual = scenarioContext.body<ExpenseResponse>()
-    actual shouldBeEqual expected
-  }
+  fun expenseReturned(expected: ExpenseResponse) =
+    scenarioContext.body<ExpenseResponse>() shouldBeEqual expected
+
+  @Then("the following expenses are returned")
+  fun expensesReturned(expected: List<ExpenseResponse>) =
+    scenarioContext.body<ExpensesResponse>() shouldBeEqual ExpensesResponse(expected)
+
+  @Then("an empty expenses response is returned")
+  fun noExpensesReturned() =
+    scenarioContext.body<ExpensesResponse>() shouldBeEqual ExpensesResponse()
 }

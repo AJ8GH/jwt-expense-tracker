@@ -14,6 +14,7 @@ import io.github.aj8gh.expenses.presentation.model.party.PartyResponse
 import io.github.aj8gh.expenses.presentation.model.party.Role
 import io.github.aj8gh.expenses.presentation.model.party.Status
 import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.shouldBe
 import java.util.*
 
 class PartySteps(
@@ -33,8 +34,13 @@ class PartySteps(
   @Given("party {alias} is deleted")
   fun deleteParty(id: UUID) = repository.deleteById(id)
 
+  @Then("{alias} is stored")
+  fun partyIsStored(party: UUID) {
+    repository.findById(party).isPresent shouldBe true
+  }
+
   @Then("{alias} is returned")
-  fun partyExists(party: UUID) {
+  fun partyIsReturned(party: UUID) {
     val actual = repository.findById(party).map {
       PartyResponse(
         id = it.id!!,

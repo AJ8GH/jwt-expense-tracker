@@ -4,8 +4,7 @@ import io.github.aj8gh.expenses.business.constant.EXPENSES_PATH
 import io.github.aj8gh.expenses.business.service.expense.ExpenseService
 import io.github.aj8gh.expenses.business.service.party.PartyIdExtractor
 import io.github.aj8gh.expenses.presentation.model.expense.CreateExpenseRequest
-import io.github.aj8gh.expenses.presentation.model.expense.ExpenseResponse
-import io.github.aj8gh.expenses.presentation.model.expense.ExpenseResponses
+import io.github.aj8gh.expenses.presentation.model.expense.ExpensesResponse
 import io.github.aj8gh.expenses.presentation.model.expense.fromRequest
 import io.github.aj8gh.expenses.presentation.model.expense.toResponse
 import org.springframework.http.HttpHeaders.AUTHORIZATION
@@ -26,15 +25,18 @@ class ExpenseController(
 ) {
 
   @GetMapping
-  fun findAll() = ExpenseResponses()
+  fun findAll(
+    @RequestHeader(AUTHORIZATION) bearerToken: String,
+  ) = service.getAll(extractor.extract(bearerToken))
+    .map { toResponse(it) }
+    .let { ExpensesResponse(it) }
 
   @PostMapping
   @ResponseStatus(CREATED)
   fun create(
     @RequestHeader(AUTHORIZATION) bearerToken: String,
     @RequestBody request: CreateExpenseRequest,
-  ): ExpenseResponse {
-    val partyId = extractor.extract(bearerToken)
-    return toResponse(service.create(fromRequest(request, partyId)))
-  }
+  ) = fromRequest(request, extractor.extract(bearerToken))
+    .let { service.create(it) }
+    .let { toResponse(it) }
 }

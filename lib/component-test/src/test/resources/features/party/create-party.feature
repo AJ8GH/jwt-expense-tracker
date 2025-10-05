@@ -3,6 +3,7 @@ Feature: Create party
   Scenario: Happy path
     When party "PTY1" is created
     Then the response status is 201
+    And PTY1 is stored
     And PTY1 is returned
 
   Scenario: Username exists
