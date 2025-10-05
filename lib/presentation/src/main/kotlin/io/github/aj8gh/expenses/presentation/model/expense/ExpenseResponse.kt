@@ -12,13 +12,17 @@ data class ExpenseResponse(
   val amount: BigDecimal,
   val date: LocalDate,
   val description: String? = null,
-)
+) {
 
-fun toResponse(created: Expense) = ExpenseResponse(
-  id = created.id!!,
-  category = Category.valueOf(created.category.name),
-  partyId = created.partyId,
-  amount = created.amount,
-  date = created.date,
-  description = created.description,
-)
+  companion object {
+    @JvmStatic
+    fun toResponse(created: Expense) = ExpenseResponse(
+      id = created.id!!,
+      category = Category.valueOf(created.category.name),
+      partyId = created.partyId,
+      amount = created.amount,
+      date = created.date,
+      description = created.description,
+    )
+  }
+}

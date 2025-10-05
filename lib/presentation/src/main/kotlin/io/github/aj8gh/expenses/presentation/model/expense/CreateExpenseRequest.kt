@@ -10,12 +10,16 @@ data class CreateExpenseRequest(
   val amount: BigDecimal,
   val date: LocalDate,
   val description: String? = null,
-)
+) {
 
-fun fromRequest(request: CreateExpenseRequest, partyId: UUID) = Expense(
-  category = Expense.Category.valueOf(request.category.name),
-  partyId = partyId,
-  amount = request.amount,
-  date = request.date,
-  description = request.description,
-)
+  companion object {
+    @JvmStatic
+    fun fromRequest(request: CreateExpenseRequest, partyId: UUID) = Expense(
+      category = Expense.Category.valueOf(request.category.name),
+      partyId = partyId,
+      amount = request.amount,
+      date = request.date,
+      description = request.description,
+    )
+  }
+}

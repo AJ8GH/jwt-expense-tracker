@@ -20,12 +20,9 @@ Feature: Get all expenses
 
   Scenario: Happy path returns 200 with multiple expenses
     Given party "PTY1" is authenticated with tokens: access "AT1", refresh "RT1"
-    And the following create expense request "EXP1" is sent with token AT1
+    And the following create expenses request "EXP1, EXP2" is sent with token AT1
       | category | amount | date       |
       | FOOD     | 100.00 | 2025-01-01 |
-    And the response status is 201
-    And the following create expense request "EXP2" is sent with token AT1
-      | category | amount | date       |
       | BILLS    | 50.00  | 2025-01-02 |
     And the response status is 201
     When a get all expenses request is sent with token AT1

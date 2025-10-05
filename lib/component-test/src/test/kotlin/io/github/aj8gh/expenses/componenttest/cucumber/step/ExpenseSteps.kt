@@ -2,6 +2,7 @@ package io.github.aj8gh.expenses.componenttest.cucumber.step
 
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
+import io.github.aj8gh.expenses.business.constant.ALL
 import io.github.aj8gh.expenses.business.constant.EXPENSES_PATH
 import io.github.aj8gh.expenses.componenttest.context.Aliases
 import io.github.aj8gh.expenses.componenttest.context.ScenarioContext
@@ -9,6 +10,7 @@ import io.github.aj8gh.expenses.componenttest.rest.Client
 import io.github.aj8gh.expenses.persistence.model.ExpenseEntity
 import io.github.aj8gh.expenses.persistence.repository.JpaExpenseRepository
 import io.github.aj8gh.expenses.presentation.model.expense.CreateExpenseRequest
+import io.github.aj8gh.expenses.presentation.model.expense.CreateExpensesRequest
 import io.github.aj8gh.expenses.presentation.model.expense.ExpenseResponse
 import io.github.aj8gh.expenses.presentation.model.expense.ExpensesResponse
 import io.kotest.matchers.equality.shouldBeEqualUsingFields
@@ -32,6 +34,22 @@ class ExpenseSteps(
     responseType = ExpenseResponse::class,
     token = token
   ).body!!.let { aliases.put(alias, it.id) }
+
+  @When("the following create expenses request {string} is sent with token {tokenAlias}")
+  fun createExpenses(
+    aliasString: String,
+    token: String,
+    expenses: List<CreateExpenseRequest>,
+  ) = client.post(
+    path = "$EXPENSES_PATH$ALL",
+    content = CreateExpensesRequest(expenses),
+    responseType = ExpensesResponse::class,
+    token = token
+  ).body!!.let {
+    aliasString.split(",").forEachIndexed { i, alias ->
+      aliases.put(alias.trim(), it.expenses[i].id)
+    }
+  }
 
   @When("a get all expenses request is sent with token {tokenAlias}")
   fun getAllExpenses(
