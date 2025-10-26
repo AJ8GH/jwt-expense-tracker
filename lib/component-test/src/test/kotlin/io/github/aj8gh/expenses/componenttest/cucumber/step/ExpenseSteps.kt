@@ -74,6 +74,28 @@ class ExpenseSteps(
     token = token
   )
 
+  @When("a delete expense {alias} request is sent with token {tokenAlias}")
+  fun deleteExpense(
+    expense: UUID,
+    token: String,
+  ) = client.delete(
+    path = "$EXPENSES_PATH$BY_ID",
+    pathVariables = arrayOf(expense),
+    responseType = Void::class,
+    token = token,
+  )
+
+  @When("an erroneous delete expense {alias} request is sent with token {tokenAlias}")
+  fun deleteExpenseForError(
+    expense: UUID,
+    token: String,
+  ) = client.delete(
+    path = "$EXPENSES_PATH$BY_ID",
+    pathVariables = arrayOf(expense),
+    responseType = ErrorResponse::class,
+    token = token,
+  )
+
   @When("an erroneous get expense {alias} request is sent with token {tokenAlias}")
   fun getExpenseForError(
     expense: UUID,
@@ -82,7 +104,7 @@ class ExpenseSteps(
     path = "$EXPENSES_PATH$BY_ID",
     pathVariables = arrayOf(expense),
     responseType = ErrorResponse::class,
-    token = token
+    token = token,
   )
 
   @Then("the following expense is stored")

@@ -19,4 +19,6 @@ class ExpenseRepository(
 
   fun findById(expenseId: UUID) = repository.findById(expenseId)
     .map { fromEntity(it) }
+
+  fun deleteById(expenseId: UUID) = repository.deleteById(expenseId)
 }

@@ -17,4 +17,6 @@ class ExpenseService(
   fun findAll(party: UUID) = repository.findAllByPartyId(party)
 
   fun findById(expenseId: UUID) = repository.findById(expenseId)
+
+  fun deleteById(expenseId: UUID) = repository.deleteById(expenseId)
 }

@@ -17,6 +17,9 @@ import io.github.aj8gh.expenses.presentation.model.expense.ExpensesResponse.Comp
 import io.github.aj8gh.expenses.presentation.validation.AuthValidator
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpStatus.CREATED
+import org.springframework.http.HttpStatus.NO_CONTENT
+import org.springframework.http.HttpStatus.OK
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -36,6 +39,7 @@ class ExpenseController(
 ) {
 
   @GetMapping
+  @ResponseStatus(OK)
   fun findAll(
     @RequestHeader(AUTHORIZATION) bearerToken: String,
   ) = service.findAll(extractor.extract(bearerToken))
@@ -43,6 +47,7 @@ class ExpenseController(
     .let { ExpensesResponse(it) }
 
   @GetMapping(BY_ID)
+  @ResponseStatus(OK)
   fun findById(
     @RequestHeader(AUTHORIZATION) bearerToken: String,
     @PathVariable id: UUID,
@@ -51,6 +56,16 @@ class ExpenseController(
     return service.findById(id)
       .map { toResponse(it) }
       .orElseThrow { ResourceNotFoundException("Expense $id not found") }
+  }
+
+  @DeleteMapping(BY_ID)
+  @ResponseStatus(NO_CONTENT)
+  fun delete(
+    @RequestHeader(AUTHORIZATION) bearerToken: String,
+    @PathVariable id: UUID,
+  ) {
+    authValidator.validateExpense(bearerToken, id)
+    service.deleteById(id)
   }
 
   @PostMapping

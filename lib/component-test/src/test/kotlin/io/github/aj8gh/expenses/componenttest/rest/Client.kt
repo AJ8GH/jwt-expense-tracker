@@ -31,6 +31,26 @@ class Client(
     .body(content)
     .let { makeRequest(it, token, responseType) }
 
+  fun <T : Any> put(
+    path: String,
+    content: Any,
+    responseType: KClass<T>,
+    pathVariables: Array<Any> = emptyArray(),
+    token: String? = null,
+  ) = restClient.put()
+    .uri(path, *pathVariables)
+    .body(content)
+    .let { makeRequest(it, token, responseType) }
+
+  fun <T : Any> delete(
+    path: String,
+    responseType: KClass<T>,
+    pathVariables: Array<Any> = emptyArray(),
+    token: String? = null,
+  ) = restClient.delete()
+    .uri(path, *pathVariables)
+    .let { makeRequest(it, token, responseType) }
+
   fun <T : Any> get(
     path: String,
     responseType: KClass<T>,
