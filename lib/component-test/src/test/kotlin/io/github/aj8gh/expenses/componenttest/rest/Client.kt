@@ -24,9 +24,10 @@ class Client(
     path: String,
     content: Any,
     responseType: KClass<T>,
+    pathVariables: Array<Any> = emptyArray(),
     token: String? = null,
   ) = restClient.post()
-    .uri(path)
+    .uri(path, *pathVariables)
     .body(content)
     .let { makeRequest(it, token, responseType) }
 
@@ -34,9 +35,10 @@ class Client(
     path: String,
     responseType: KClass<T>,
     token: String? = null,
+    pathVariables: Array<Any> = emptyArray(),
     headers: Map<String, List<String>> = mapOf(),
   ) = restClient.get()
-    .uri(path)
+    .uri(path, *pathVariables)
     .headers { toHeaders(headers) }
     .let { makeRequest(it, token, responseType) }
 

@@ -55,7 +55,7 @@ class PartySteps(
 
   fun createParty(
     alias: String,
-    request: CreatePartyRequest = transformer.default(),
+    request: CreatePartyRequest = transformer.default(alias),
   ): PartyResponse {
     val created = client.post(
       path = PARTIES_PATH,

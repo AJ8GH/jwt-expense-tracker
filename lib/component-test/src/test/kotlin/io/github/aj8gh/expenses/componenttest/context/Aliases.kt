@@ -14,4 +14,10 @@ class Aliases(
   fun put(key: String, value: UUID) = run { aliases[key] = value }
 
   fun getOrCreate(key: String) = aliases.computeIfAbsent(key) { randomUUID() }
+
+  fun replaceAll(value: String): String {
+    var out = value
+    aliases.forEach { (k, v) -> out = out.replace(k, v.toString()) }
+    return out
+  }
 }

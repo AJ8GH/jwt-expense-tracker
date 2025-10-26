@@ -14,5 +14,7 @@ class ExpenseService(
 
   fun createAll(toCreate: List<Expense>) = toCreate.map { create(it) }
 
-  fun getAll(party: UUID) = repository.findAllByPartyId(party)
+  fun findAll(party: UUID) = repository.findAllByPartyId(party)
+
+  fun findById(expenseId: UUID) = repository.findById(expenseId)
 }

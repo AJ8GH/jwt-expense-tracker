@@ -16,4 +16,7 @@ class ExpenseRepository(
 
   fun findAllByPartyId(party: UUID) = repository.findAllByPartyId(party)
     .map { fromEntity(it) }
+
+  fun findById(expenseId: UUID) = repository.findById(expenseId)
+    .map { fromEntity(it) }
 }

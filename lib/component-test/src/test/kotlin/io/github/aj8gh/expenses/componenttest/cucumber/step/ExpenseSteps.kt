@@ -3,18 +3,21 @@ package io.github.aj8gh.expenses.componenttest.cucumber.step
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.github.aj8gh.expenses.business.constant.ALL
+import io.github.aj8gh.expenses.business.constant.BY_ID
 import io.github.aj8gh.expenses.business.constant.EXPENSES_PATH
 import io.github.aj8gh.expenses.componenttest.context.Aliases
 import io.github.aj8gh.expenses.componenttest.context.ScenarioContext
 import io.github.aj8gh.expenses.componenttest.rest.Client
 import io.github.aj8gh.expenses.persistence.model.ExpenseEntity
 import io.github.aj8gh.expenses.persistence.repository.JpaExpenseRepository
+import io.github.aj8gh.expenses.presentation.model.error.ErrorResponse
 import io.github.aj8gh.expenses.presentation.model.expense.CreateExpenseRequest
 import io.github.aj8gh.expenses.presentation.model.expense.CreateExpensesRequest
 import io.github.aj8gh.expenses.presentation.model.expense.ExpenseResponse
 import io.github.aj8gh.expenses.presentation.model.expense.ExpensesResponse
 import io.kotest.matchers.equality.shouldBeEqualUsingFields
 import io.kotest.matchers.equals.shouldBeEqual
+import java.util.*
 
 class ExpenseSteps(
   private val client: Client,
@@ -57,6 +60,28 @@ class ExpenseSteps(
   ) = client.get(
     path = EXPENSES_PATH,
     responseType = ExpensesResponse::class,
+    token = token
+  )
+
+  @When("a get expense {alias} request is sent with token {tokenAlias}")
+  fun getExpense(
+    expense: UUID,
+    token: String,
+  ) = client.get(
+    path = "$EXPENSES_PATH$BY_ID",
+    pathVariables = arrayOf(expense),
+    responseType = ExpenseResponse::class,
+    token = token
+  )
+
+  @When("an erroneous get expense {alias} request is sent with token {tokenAlias}")
+  fun getExpenseForError(
+    expense: UUID,
+    token: String,
+  ) = client.get(
+    path = "$EXPENSES_PATH$BY_ID",
+    pathVariables = arrayOf(expense),
+    responseType = ErrorResponse::class,
     token = token
   )
 

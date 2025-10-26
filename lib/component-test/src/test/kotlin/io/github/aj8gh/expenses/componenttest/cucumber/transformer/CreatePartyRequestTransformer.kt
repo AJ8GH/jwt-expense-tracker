@@ -19,5 +19,6 @@ class CreatePartyRequestTransformer {
     role = data[ROLE]?.let(Role::valueOf) ?: USER,
   )
 
-  fun default() = transform(emptyMap())
+  fun default(username: String = DEFAULT_USERNAME) =
+    transform(mapOf(Pair(USERNAME, username)))
 }
