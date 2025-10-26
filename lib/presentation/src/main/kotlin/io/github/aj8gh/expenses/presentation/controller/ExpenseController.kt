@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
@@ -85,4 +86,18 @@ class ExpenseController(
   ) = fromRequests(request, extractor.extract(bearerToken))
     .let { service.createAll(it) }
     .let { toResponses(it) }
+
+  @PutMapping(BY_ID)
+  @ResponseStatus(CREATED)
+  fun update(
+    @RequestHeader(AUTHORIZATION) bearerToken: String,
+    @PathVariable id: UUID,
+    @RequestBody request: CreateExpenseRequest,
+  ): ExpenseResponse {
+    authValidator.validateExpense(bearerToken, id)
+    return fromRequest(request, extractor.extract(bearerToken), id)
+      .let { service.update(it) }
+      .map { toResponse(it) }
+      .orElseThrow { ResourceNotFoundException("Expense $id not found") }
+  }
 }

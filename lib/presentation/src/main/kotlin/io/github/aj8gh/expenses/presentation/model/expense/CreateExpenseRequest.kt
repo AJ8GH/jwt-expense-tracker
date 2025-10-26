@@ -14,7 +14,12 @@ data class CreateExpenseRequest(
 
   companion object {
     @JvmStatic
-    fun fromRequest(request: CreateExpenseRequest, partyId: UUID) = Expense(
+    fun fromRequest(
+      request: CreateExpenseRequest,
+      partyId: UUID,
+      id: UUID? = null,
+    ) = Expense(
+      id = id,
       category = Expense.Category.valueOf(request.category.name),
       partyId = partyId,
       amount = request.amount,

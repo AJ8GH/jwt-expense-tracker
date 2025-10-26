@@ -27,13 +27,14 @@ data class Expense(
   }
 }
 
-fun toEntity(model: Expense) = ExpenseEntity(
+fun toEntity(model: Expense, entity: ExpenseEntity? = null) = ExpenseEntity(
   id = model.id,
   category = ExpenseEntity.Category.valueOf(model.category.name),
   partyId = model.partyId,
   amount = model.amount,
   date = model.date,
   description = model.description,
+  createdAt = entity?.createdAt
 )
 
 fun fromEntity(entity: ExpenseEntity) = Expense(

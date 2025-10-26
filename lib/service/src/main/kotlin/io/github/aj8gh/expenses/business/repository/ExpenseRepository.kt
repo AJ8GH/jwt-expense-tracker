@@ -5,7 +5,7 @@ import io.github.aj8gh.expenses.business.model.expense.fromEntity
 import io.github.aj8gh.expenses.business.model.expense.toEntity
 import io.github.aj8gh.expenses.persistence.repository.JpaExpenseRepository
 import org.springframework.stereotype.Repository
-import java.util.UUID
+import java.util.*
 
 @Repository
 class ExpenseRepository(
@@ -21,4 +21,8 @@ class ExpenseRepository(
     .map { fromEntity(it) }
 
   fun deleteById(expenseId: UUID) = repository.deleteById(expenseId)
+
+  fun update(expense: Expense) = repository.findById(expense.id!!)
+    .map { repository.save(toEntity(expense, it)) }
+    .map { fromEntity(it) }
 }

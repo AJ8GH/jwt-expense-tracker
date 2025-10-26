@@ -107,6 +107,32 @@ class ExpenseSteps(
     token = token,
   )
 
+  @When("an erroneous put expense {alias} request is sent with token {tokenAlias}")
+  fun putExpenseForError(
+    expense: UUID,
+    token: String,
+    request: CreateExpenseRequest,
+  ) = client.put(
+    path = "$EXPENSES_PATH$BY_ID",
+    pathVariables = arrayOf(expense),
+    responseType = ErrorResponse::class,
+    content = request,
+    token = token,
+  )
+
+  @When("a put expense {alias} request is sent with token {tokenAlias}")
+  fun putExpense(
+    expense: UUID,
+    token: String,
+    request: CreateExpenseRequest,
+  ) = client.put(
+    path = "$EXPENSES_PATH$BY_ID",
+    pathVariables = arrayOf(expense),
+    responseType = ExpenseResponse::class,
+    content = request,
+    token = token,
+  )
+
   @Then("the following expense is stored")
   fun expenseStored(expected: ExpenseEntity) =
     repository.findById(expected.id!!).orElseThrow() shouldBeEqualUsingFields {

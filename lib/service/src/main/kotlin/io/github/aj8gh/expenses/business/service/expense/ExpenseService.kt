@@ -19,4 +19,6 @@ class ExpenseService(
   fun findById(expenseId: UUID) = repository.findById(expenseId)
 
   fun deleteById(expenseId: UUID) = repository.deleteById(expenseId)
+
+  fun update(expense: Expense) = repository.update(expense)
 }
